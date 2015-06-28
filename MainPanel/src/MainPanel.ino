@@ -7,13 +7,17 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-// Pin 13 has an LED connected on most Arduino boards.
-// Pin 11 has the LED on Teensy 2.0
-// Pin 6  has the LED on Teensy++ 2.0
-// Pin 13 has the LED on Teensy 3.0
-int led = 13;
+int keySwitch = 6;
+int keyLed = 14;
+boolean keyState = false;
 
-int ledMap[4][5] = {{ 3,  4,  9,  8, 34},
+int redSwitch = 15;
+int redLed = 12;
+boolean redState = false;
+
+int knobPin = A9;
+
+int ledMap[4][5] = {{ 3,  9,  4,  8, 34},
                     {37, 28, 38, 33, 22},
                     {36, 39, 32, 30, 41},
                     {26, 40, 35, 24, 7 }};
@@ -23,13 +27,15 @@ int switchMap[4][5] = {{42, 50, 44, 45, 11},
                        {43, 17, 20, 51, 10},
                        {19, 52, 46, 53,  5}};
 
-#define numInverted 3
-int invertedSwitches[numInverted] = {11, 2, 10};
+#define numInvertedSwitches 7
+int invertedSwitches[numInvertedSwitches] = {42, 50, 44, 45, 11, 2, 10};
 
 boolean switchStates[4][5];
 
+void setupSwitchLed(int Switch, int Led);
 
 void getSwitchStates();
+void readAnalog();
 void writeLeds();
 
 void offMode();
@@ -37,6 +43,15 @@ void randomPartyMode();
 void toggleFlipMode();
 void writeLeds();
 void serialSwitchStates();
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void setupSwitchLed(int Switch, int Led)
+{
+  pinMode(Switch, INPUT_PULLUP);
+  pinMode(Led, OUTPUT);
+  digitalWrite(Led, LOW);
+}
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -53,6 +68,8 @@ void setup()
       switchStates[i][j] = digitalRead(switchMap[i][j]);
     }
   }
+  setupSwitchLed(keySwitch, keyLed);
+  setupSwitchLed(redSwitch, redLed);
 }
 
 //------------------------------------------------------------------------------
@@ -77,7 +94,7 @@ void serialSwitchStates()
 boolean isInverted(int pinValue)
 {
   boolean inverted = false;
-  for (int i = 0; i < numInverted; ++i)
+  for (int i = 0; i < numInvertedSwitches; ++i)
   {
     if (pinValue == invertedSwitches[i])
     {
@@ -107,6 +124,8 @@ void getSwitchStates()
       }
     }
   }
+  keyState = digitalRead(keySwitch);
+  redState = digitalRead(redSwitch);
 }
 
 //------------------------------------------------------------------------------
@@ -120,6 +139,20 @@ void writeLeds()
         digitalWrite(ledMap[i][j], switchStates[i][j]);
     }
   }
+  digitalWrite(keyLed, keyState);
+  digitalWrite(redLed, redState);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void readAnalog()
+{
+  int knobValue = analogRead(knobPin);
+  knobValue = map(knobValue, 0, 1024, 0, 255);
+  Serial.print("knobValue = ");
+  Serial.println(knobValue);
+  Serial.println();
+  analogWrite(13, knobValue);
 }
 
 //------------------------------------------------------------------------------
@@ -141,4 +174,5 @@ void loop()
 {
   getSwitchStates();
   writeLeds();
+  readAnalog();
 }
