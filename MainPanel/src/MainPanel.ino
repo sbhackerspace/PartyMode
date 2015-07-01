@@ -17,26 +17,32 @@ boolean redState = false;
 
 int knobPin = A9;
 
-int ledMap[4][5] = {{ 3,  9,  4,  8, 34},
-                    {37, 28, 38, 33, 22},
-                    {36, 39, 32, 30, 41},
-                    {26, 40, 35, 24, 7 }};
+int toggleLeds[4][4] = {{ 3,  9,  4,  8},
+                    {37, 28, 38, 33},
+                    {36, 39, 32, 30},
+                    {26, 40, 35, 24}};
 
-int switchMap[4][5] = {{42, 50, 44, 45, 11},
-                       {21, 47, 49, 48, 2},
-                       {43, 17, 20, 51, 10},
-                       {19, 52, 46, 53,  5}};
+int toggleMap[4][4] = {{42, 50, 44, 45},
+                       {21, 47, 49, 48},
+                       {43, 17, 20, 51},
+                       {19, 52, 46, 53}};
+
+int sideSwitches[4] = {11, 2, 10, 5};
+int sideLeds[4] = {34, 22, 41, 7};
+boolean sideStates[4];
 
 #define numInvertedSwitches 7
 int invertedSwitches[numInvertedSwitches] = {42, 50, 44, 45, 11, 2, 10};
 
-boolean switchStates[4][5];
+boolean toggleStates[4][4];
 
 void setupSwitchLed(int Switch, int Led);
 
+void getSideStates();
 void getSwitchStates();
 void readAnalog();
 void writeLeds();
+void writeSideLeds();
 
 void offMode();
 void randomPartyMode();
@@ -60,33 +66,17 @@ void setup()
   Serial.begin(9600);
   for(int i = 0; i < 4; i++)
   {
-    for(int j = 0; j < 5; ++j)
+    for(int j = 0; j < 4; ++j)
     {
-      pinMode(ledMap[i][j], OUTPUT);
-      pinMode(switchMap[i][j], INPUT_PULLUP);
-      digitalWrite(ledMap[i][j], LOW);
-      switchStates[i][j] = digitalRead(switchMap[i][j]);
+      pinMode(toggleLeds[i][j], OUTPUT);
+      pinMode(toggleMap[i][j], INPUT_PULLUP);
+      digitalWrite(toggleLeds[i][j], LOW);
+      toggleStates[i][j] = digitalRead(toggleMap[i][j]);
     }
+    sideStates[i] = digitalRead(sideSwitches[i]);
   }
   setupSwitchLed(keySwitch, keyLed);
   setupSwitchLed(redSwitch, redLed);
-}
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-void serialSwitchStates()
-{
-  Serial.println();
-  Serial.println();
-  for(int i = 0; i < 4; i++)
-  {
-    for(int j = 0; j < 5; ++j)
-    {
-      Serial.print(switchStates[i][j]);
-      Serial.print(", ");
-    }
-      Serial.println();
-  }
 }
 
 //------------------------------------------------------------------------------
@@ -106,26 +96,32 @@ boolean isInverted(int pinValue)
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void getSwitchState(boolean& switchState, int switchPin)
+{
+  if(isInverted(switchPin))
+  {
+    switchState = !digitalRead(switchPin);
+  }
+  else
+  {
+    switchState = digitalRead(switchPin);
+  }
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void getSwitchStates()
 {
-  int pinValue;
   for(int i = 0; i < 4; i++)
   {
-    for(int j = 0; j < 5; ++j)
+    for(int j = 0; j < 4; ++j)
     {
-      pinValue = switchMap[i][j];
-      if(isInverted(pinValue))
-      {
-        switchStates[i][j] = !digitalRead(switchMap[i][j]);
-      }
-      else
-      {
-        switchStates[i][j] = digitalRead(switchMap[i][j]);
-      }
+      getSwitchState(toggleStates[i][j], toggleMap[i][j]);
     }
+    getSwitchState(sideStates[i], sideSwitches[i]);
   }
-  keyState = digitalRead(keySwitch);
-  redState = digitalRead(redSwitch);
+  getSwitchState(keyState, keySwitch);
+  getSwitchState(redState, redSwitch);
 }
 
 //------------------------------------------------------------------------------
@@ -134,10 +130,11 @@ void writeLeds()
 {
   for(int i = 0; i < 4; i++)
   {
-    for(int j = 0; j < 5; ++j)
+    for(int j = 0; j < 4; ++j)
     {
-        digitalWrite(ledMap[i][j], switchStates[i][j]);
+      digitalWrite(toggleLeds[i][j], toggleStates[i][j]);
     }
+    digitalWrite(sideLeds[i], sideStates[i]);
   }
   digitalWrite(keyLed, keyState);
   digitalWrite(redLed, redState);
@@ -161,10 +158,11 @@ void offMode()
 {
   for(int i = 0; i < 4; i++)
   {
-    for(int j = 0; j < 5; ++j)
+    for(int j = 0; j < 4; ++j)
     {
-      digitalWrite(ledMap[i][j], LOW);
+      digitalWrite(toggleLeds[i][j], LOW);
     }
+    digitalWrite(sideLeds[i], LOW);
   }
 }
 
