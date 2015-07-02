@@ -6,8 +6,8 @@ from subprocess import Popen, PIPE
 ################################################################################
 def BuildAndUpload(ProjectFilePath):
   os.chdir(ProjectFilePath)
-  print Popen([r"ino","build"], stdout=PIPE).communicate()[0]
-  print Popen([r"ino", "upload"], stdout=PIPE).communicate()[0]
+  print Popen([r"/usr/local/bin/ino","build"], stdout=PIPE).communicate()[0]
+  print Popen([r"/usr/local/bin/ino", "upload"], stdout=PIPE).communicate()[0]
 
 ################################################################################
 def Update(RepoFilePath, BranchName):
@@ -29,6 +29,7 @@ def Update(RepoFilePath, BranchName):
 ################################################################################
 ################################################################################
 if __name__ == "__main__":
+
   RepoPath = os.path.expanduser('~/PartyMode')
   NewHash, OldHash = Update(RepoPath, 'develop')
   if NewHash != OldHash:
