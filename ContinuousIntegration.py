@@ -31,6 +31,5 @@ def Update(RepoFilePath, BranchName):
 if __name__ == "__main__":
   RepoPath = os.path.expanduser('~/PartyMode')
   NewHash, OldHash = Update(RepoPath, 'develop')
-  print NewHash == OldHash
   if NewHash != OldHash:
     BuildAndUpload(RepoPath + '/MainPanel')
