@@ -24,11 +24,13 @@ def Update(RepoFilePath, BranchName):
     repo.git.pull()
 
   NewHash = repo.head.commit.hexsha[0:7]
-  return (NewHash is not OldHash), NewHash, OldHash
+  return NewHash, OldHash
 
 ################################################################################
 ################################################################################
 if __name__ == "__main__":
   RepoPath = os.path.expanduser('~/PartyMode')
-  if Update(RepoPath, 'master'):
+  NewHash, OldHash = Update(RepoPath, 'develop')
+  print NewHash == OldHash
+  if NewHash != OldHash:
     BuildAndUpload(RepoPath + '/MainPanel')
