@@ -18,9 +18,9 @@ boolean redState = false;
 int knobPin = A9;
 
 int toggleLeds[4][4] = {{ 3,  9,  4,  8},
-                    {37, 28, 38, 33},
-                    {36, 39, 32, 30},
-                    {26, 40, 35, 24}};
+                        {37, 28, 38, 33},
+                        {36, 39, 32, 30},
+                        {26, 40, 35, 24}};
 
 int toggleMap[4][4] = {{42, 50, 44, 45},
                        {21, 47, 49, 48},
@@ -71,9 +71,9 @@ void setup()
       pinMode(toggleLeds[i][j], OUTPUT);
       pinMode(toggleMap[i][j], INPUT_PULLUP);
       digitalWrite(toggleLeds[i][j], LOW);
-      toggleStates[i][j] = digitalRead(toggleMap[i][j]);
     }
-    sideStates[i] = digitalRead(sideSwitches[i]);
+    pinMode(sideLeds[i], OUTPUT);
+    pinMode(sideSwitches[i], INPUT_PULLUP);
   }
   setupSwitchLed(keySwitch, keyLed);
   setupSwitchLed(redSwitch, redLed);
