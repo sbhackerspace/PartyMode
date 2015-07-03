@@ -7,34 +7,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-int keySwitch = 6;
-int keyLed = 14;
-boolean keyState = false;
-
-int redSwitch = 15;
-int redLed = 12;
-boolean redState = false;
-
-int knobPin = A9;
-
-int toggleLeds[4][4] = {{ 3,  9,  4,  8},
-                        {37, 28, 38, 33},
-                        {36, 39, 32, 30},
-                        {26, 40, 35, 24}};
-
-int toggleMap[4][4] = {{42, 50, 44, 45},
-                       {21, 47, 49, 48},
-                       {43, 17, 20, 51},
-                       {19, 52, 46, 53}};
-
-int sideSwitches[4] = {11, 2, 10, 5};
-int sideLeds[4] = {34, 22, 41, 7};
-boolean sideStates[4];
-
-#define numInvertedSwitches 7
-int invertedSwitches[numInvertedSwitches] = {42, 50, 44, 45, 11, 2, 10};
-
-boolean toggleStates[4][4];
+#include "Panel.h"
 
 void setupSwitchLed(int Switch, int Led);
 
@@ -49,6 +22,8 @@ void randomPartyMode();
 void toggleFlipMode();
 void writeLeds();
 void serialSwitchStates();
+
+Panel panel;
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -68,15 +43,15 @@ void setup()
   {
     for(int j = 0; j < 4; ++j)
     {
-      pinMode(toggleLeds[i][j], OUTPUT);
-      pinMode(toggleMap[i][j], INPUT_PULLUP);
-      digitalWrite(toggleLeds[i][j], LOW);
+      pinMode(panel.toggleLeds[i][j], OUTPUT);
+      pinMode(panel.toggleMap[i][j], INPUT_PULLUP);
+      digitalWrite(panel.toggleLeds[i][j], LOW);
     }
-    pinMode(sideLeds[i], OUTPUT);
-    pinMode(sideSwitches[i], INPUT_PULLUP);
+    pinMode(panel.sideLeds[i], OUTPUT);
+    pinMode(panel.sideSwitches[i], INPUT_PULLUP);
   }
-  setupSwitchLed(keySwitch, keyLed);
-  setupSwitchLed(redSwitch, redLed);
+  setupSwitchLed(panel.keySwitch, panel.keyLed);
+  setupSwitchLed(panel.redSwitch, panel.redLed);
 }
 
 //------------------------------------------------------------------------------
@@ -86,7 +61,7 @@ boolean isInverted(int pinValue)
   boolean inverted = false;
   for (int i = 0; i < numInvertedSwitches; ++i)
   {
-    if (pinValue == invertedSwitches[i])
+    if (pinValue == panel.invertedSwitches[i])
     {
       return true;
     }
@@ -116,12 +91,12 @@ void getSwitchStates()
   {
     for(int j = 0; j < 4; ++j)
     {
-      getSwitchState(toggleStates[i][j], toggleMap[i][j]);
+      getSwitchState(panel.toggleStates[i][j], panel.toggleMap[i][j]);
     }
-    getSwitchState(sideStates[i], sideSwitches[i]);
+    getSwitchState(panel.sideStates[i], panel.sideSwitches[i]);
   }
-  getSwitchState(keyState, keySwitch);
-  getSwitchState(redState, redSwitch);
+  getSwitchState(panel.keyState, panel.keySwitch);
+  getSwitchState(panel.redState, panel.redSwitch);
 }
 
 //------------------------------------------------------------------------------
@@ -132,19 +107,19 @@ void writeLeds()
   {
     for(int j = 0; j < 4; ++j)
     {
-      digitalWrite(toggleLeds[i][j], toggleStates[i][j]);
+      digitalWrite(panel.toggleLeds[i][j], panel.toggleStates[i][j]);
     }
-    digitalWrite(sideLeds[i], sideStates[i]);
+    digitalWrite(panel.sideLeds[i], panel.sideStates[i]);
   }
-  digitalWrite(keyLed, keyState);
-  digitalWrite(redLed, redState);
+  digitalWrite(panel.keyLed, panel.keyState);
+  digitalWrite(panel.redLed, panel.redState);
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void readAnalog()
 {
-  int knobValue = analogRead(knobPin);
+  int knobValue = analogRead(panel.knobPin);
   knobValue = map(knobValue, 0, 1024, 0, 255);
   Serial.print("knobValue = ");
   Serial.println(knobValue);
@@ -160,9 +135,9 @@ void offMode()
   {
     for(int j = 0; j < 4; ++j)
     {
-      digitalWrite(toggleLeds[i][j], LOW);
+      digitalWrite(panel.toggleLeds[i][j], LOW);
     }
-    digitalWrite(sideLeds[i], LOW);
+    digitalWrite(panel.sideLeds[i], LOW);
   }
 }
 
