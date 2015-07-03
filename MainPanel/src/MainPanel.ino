@@ -13,7 +13,7 @@ void setupSwitchLed(int Switch, int Led);
 
 void getSideStates();
 void getSwitchStates();
-void readAnalog();
+void readAndWriteRedButton();
 void writeLeds();
 void writeSideLeds();
 
@@ -117,14 +117,11 @@ void writeLeds()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void readAnalog()
+void readAndWriteRedButton()
 {
   int knobValue = analogRead(panel.knobPin);
-  knobValue = map(knobValue, 0, 1024, 0, 255);
-  Serial.print("knobValue = ");
-  Serial.println(knobValue);
-  Serial.println();
-  analogWrite(13, knobValue);
+  knobValue = map(knobValue, 0, 1024, 0, 128);
+  analogWrite(13, 128 - knobValue);
 }
 
 //------------------------------------------------------------------------------
@@ -147,5 +144,5 @@ void loop()
 {
   getSwitchStates();
   writeLeds();
-  readAnalog();
+  readAndWriteRedButton();
 }
