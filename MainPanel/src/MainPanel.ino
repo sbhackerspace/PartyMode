@@ -117,11 +117,11 @@ void writeLeds()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void readAndWriteRedButton()
+void readAndWriteSiren()
 {
   int knobValue = analogRead(panel.knobPin);
-  knobValue = map(knobValue, 0, 1024, 0, 128);
-  analogWrite(13, 128 - knobValue);
+  knobValue = map(knobValue, 0, 1024, 0, 255);
+  analogWrite(13, knobValue);
 }
 
 //------------------------------------------------------------------------------
@@ -144,5 +144,5 @@ void loop()
 {
   getSwitchStates();
   writeLeds();
-  readAndWriteRedButton();
+  readAndWriteSiren();
 }

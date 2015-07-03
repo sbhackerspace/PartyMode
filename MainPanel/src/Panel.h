@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-#define numInvertedSwitches 7
+#define numInvertedSwitches 8
 
 class Panel{
 public:

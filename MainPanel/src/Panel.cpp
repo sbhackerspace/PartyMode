@@ -18,7 +18,7 @@ const int Panel::toggleLeds[4][4] = {{ 3,  9,  4,  8},
 
 const int Panel::sideSwitches[4] = {11, 2, 10, 5};
 const int Panel::sideLeds[4] = {34, 22, 41, 7};
-const int Panel::invertedSwitches[numInvertedSwitches] = {42, 50, 44, 45, 11, 2, 10};
+const int Panel::invertedSwitches[numInvertedSwitches] = {15, 42, 50, 44, 45, 11, 2, 10};
 
 Panel::Panel(void){
 	keyState = false;
