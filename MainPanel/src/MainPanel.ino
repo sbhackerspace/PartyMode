@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 #include "Panel.h"
+#include "Ring.h"
 
 void setupSwitchLed(int Switch, int Led);
 
@@ -24,7 +25,7 @@ void writeLeds();
 void serialSwitchStates();
 
 Panel panel;
- 
+Ring colorRing;
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -144,6 +145,7 @@ void offMode()
 //------------------------------------------------------------------------------
 void loop()
 {
+  colorRing.showColors(50);
   getSwitchStates();
   writeLeds();
   readAndWriteSiren();
