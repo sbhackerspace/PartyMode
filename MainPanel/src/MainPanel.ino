@@ -53,6 +53,7 @@ void setup()
   }
   setupSwitchLed(panel.keySwitch, panel.keyLed);
   setupSwitchLed(panel.redSwitch, panel.redLed);
+  panel.sirenOffset = analogRead(panel.knobPin);
 }
 
 //------------------------------------------------------------------------------
@@ -121,7 +122,7 @@ void writeLeds()
 void readAndWriteSiren()
 {
   int knobValue = analogRead(panel.knobPin);
-  knobValue = map(knobValue, 0, 1024, 0, 255);
+  knobValue = map(knobValue, panel.sirenOffset, 1024, 0, 255);
   analogWrite(13, knobValue);
 }
 

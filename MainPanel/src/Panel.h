@@ -16,6 +16,7 @@ public:
 	boolean sideStates[4];
 	boolean toggleStates[4][4];
 	boolean keyState, redState;
+	int sirenOffset;
 
 	Panel();
 
