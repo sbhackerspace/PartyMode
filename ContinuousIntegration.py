@@ -6,12 +6,17 @@ from subprocess import Popen, PIPE
 ################################################################################
 def BuildAndUpload(ProjectFilePath):
   os.chdir(ProjectFilePath)
-  print Popen([r"/usr/local/bin/ino","build"], stdout=PIPE).communicate()[0]
-  print Popen([r"/usr/local/bin/ino", "upload"], stdout=PIPE).communicate()[0]
+  print Popen([r'/usr/local/bin/ino','build'], stdout=PIPE).communicate()[0]
+  print Popen([r'/usr/local/bin/ino', 'upload'], stdout=PIPE).communicate()[0]
 
 ################################################################################
 def Update(RepoFilePath, BranchName):
   repo = git.Repo(RepoFilePath)
+
+  #clean and reset the repo
+  repo.git.clean('-fd')
+  repo.git.reset('--hard')
+
   repo.git.checkout(BranchName)
 
   OldHash = repo.head.commit.hexsha[0:7]
