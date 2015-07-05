@@ -121,7 +121,7 @@ void writeLeds()
 void readAndWriteSiren()
 {
   int knobValue = analogRead(panel.knobPin);
-  knobValue = map(knobValue, 10, 1024, 0, 255);
+  knobValue = map(knobValue, 12, 1024, 0, 255);
   analogWrite(13, knobValue);
 }
 
