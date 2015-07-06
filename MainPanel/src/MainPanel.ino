@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-//  This is the control code for the large panel of the emergency party button
+//  Description:
+//    This is the control code for the large panel of the emergency party button
 //
 //  Authors: Mike Kapuscik, Dan Loman
 //
@@ -45,15 +46,15 @@ void setup()
   {
     for(int j = 0; j < 4; ++j)
     {
-      pinMode(panel.toggleLeds[i][j], OUTPUT);
-      pinMode(panel.toggleMap[i][j], INPUT_PULLUP);
-      digitalWrite(panel.toggleLeds[i][j], LOW);
+      pinMode(panel.mToggleLeds[i][j], OUTPUT);
+      pinMode(panel.mToggleMap[i][j], INPUT_PULLUP);
+      digitalWrite(panel.mToggleLeds[i][j], LOW);
     }
-    pinMode(panel.sideLeds[i], OUTPUT);
-    pinMode(panel.sideSwitches[i], INPUT_PULLUP);
+    pinMode(panel.mSideLeds[i], OUTPUT);
+    pinMode(panel.mSideSwitches[i], INPUT_PULLUP);
   }
-  setupSwitchLed(panel.keySwitch, panel.keyLed);
-  setupSwitchLed(panel.redSwitch, panel.redLed);
+  setupSwitchLed(panel.mKeySwitch, panel.mKeyLed);
+  setupSwitchLed(panel.mRedSwitch, panel.mRedLed);
   panel.sirenOffset = analogRead(panel.knobPin);
 }
 
@@ -64,7 +65,7 @@ boolean isInverted(int pinValue)
   boolean inverted = false;
   for (int i = 0; i < numInvertedSwitches; ++i)
   {
-    if (pinValue == panel.invertedSwitches[i])
+    if (pinValue == panel.mInvertedSwitches[i])
     {
       return true;
     }
@@ -94,12 +95,12 @@ void getSwitchStates()
   {
     for(int j = 0; j < 4; ++j)
     {
-      getSwitchState(panel.toggleStates[i][j], panel.toggleMap[i][j]);
+      getSwitchState(panel.mToggleStates[i][j], panel.mToggleMap[i][j]);
     }
-    getSwitchState(panel.sideStates[i], panel.sideSwitches[i]);
+    getSwitchState(panel.mSideStates[i], panel.mSideSwitches[i]);
   }
-  getSwitchState(panel.keyState, panel.keySwitch);
-  getSwitchState(panel.redState, panel.redSwitch);
+  getSwitchState(panel.mKeyState, panel.mKeySwitch);
+  getSwitchState(panel.mRedState, panel.mRedSwitch);
 }
 
 //------------------------------------------------------------------------------
@@ -110,20 +111,20 @@ void writeLeds()
   {
     for(int j = 0; j < 4; ++j)
     {
-      digitalWrite(panel.toggleLeds[i][j], panel.toggleStates[i][j]);
+      digitalWrite(panel.mToggleLeds[i][j], panel.mToggleStates[i][j]);
     }
-    digitalWrite(panel.sideLeds[i], panel.sideStates[i]);
+    digitalWrite(panel.mSideLeds[i], panel.mSideStates[i]);
   }
-  digitalWrite(panel.keyLed, panel.keyState);
-  digitalWrite(panel.redLed, panel.redState);
+  digitalWrite(panel.mKeyLed, panel.mKeyState);
+  digitalWrite(panel.mRedLed, panel.mRedState);
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void readAndWriteSiren()
 {
-  int knobValue = analogRead(panel.knobPin);
-  knobValue = map(knobValue, panel.sirenOffset, 1024, 0, 255);
+  int knobValue = analogRead(panel.mKnobPin);
+  knobValue = map(knobValue, panel.mSirenOffset, 1024, 0, 255);
   analogWrite(13, knobValue);
 }
 
@@ -135,9 +136,9 @@ void offMode()
   {
     for(int j = 0; j < 4; ++j)
     {
-      digitalWrite(panel.toggleLeds[i][j], LOW);
+      digitalWrite(panel.mToggleLeds[i][j], LOW);
     }
-    digitalWrite(panel.sideLeds[i], LOW);
+    digitalWrite(panel.mSideLeds[i], LOW);
   }
 }
 
