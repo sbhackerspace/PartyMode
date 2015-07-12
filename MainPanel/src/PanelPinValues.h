@@ -7,8 +7,10 @@
 
 #include "Panel.h"
 
-const int Panel::mKeyPin = 6;
-const int Panel::mKeyLed = 14;
+const int Panel::mLeftKeyPin = 6;
+const int Panel::mLeftKeyLed = 14;
+const int Panel::mRightKeyPin = 18;
+const int Panel::mRightKeyLed = A8;
 const int Panel::mRedButtonPin = 15;
 const int Panel::mRedLed	= 12;
 const int Panel::mKnobPin = A9;
@@ -25,4 +27,4 @@ const int Panel::mToggleLeds[4][4] = {{ 3,  9,  4,  8},
 
 const int Panel::mSideSwitches[4] = {11, 2, 10, 5};
 const int Panel::mSideLeds[4] = {34, 22, 41, 7};
-const int Panel::mInvertedSwitches[numInvertedSwitches] = {15, 42, 50, 44, 45, 11, 2, 10};
+const int Panel::mInvertedSwitches[numInvertedSwitches] = {15, 42, 50, 44, 45, 11, 2, 10, 18};

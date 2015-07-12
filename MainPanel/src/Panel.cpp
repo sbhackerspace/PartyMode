@@ -4,7 +4,8 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 Panel::Panel(void)
-  : mKeyState(false),
+  : mLeftKeyState(false),
+    mRightKeyState(false),
     mRedState(false),
     mToggleStates({
       {false, false, false, false},
@@ -40,7 +41,8 @@ void Panel::setupPanel()
     pinMode(mSideLeds[i], OUTPUT);
     pinMode(mSideSwitches[i], INPUT_PULLUP);
   }
-  setupSwitchLed(mKeyPin, mKeyLed);
+  setupSwitchLed(mLeftKeyPin, mLeftKeyLed);
+  setupSwitchLed(mRightKeyPin, mRightKeyLed);
   setupSwitchLed(mRedButtonPin, mRedLed);
 }
 
@@ -56,7 +58,8 @@ void Panel::writeLeds(void) const
     }
     digitalWrite(mSideLeds[i], mSideStates[i]);
   }
-  digitalWrite(mKeyLed, mKeyState);
+  digitalWrite(mLeftKeyLed, mLeftKeyState);
+  digitalWrite(mRightKeyLed, mRightKeyState);
   digitalWrite(mRedLed, mRedState);
 }
 
@@ -133,7 +136,9 @@ void Panel::getSwitchStates()
     }
     getSwitchState(mSideStates[i], mSideSwitches[i]);
   }
-  getSwitchState(mKeyState, mKeyPin);
+  getSwitchState(mLeftKeyState, mLeftKeyPin);
+  getSwitchState(mRightKeyState, mRightKeyPin);
+  Serial.println(mRightKeyState);
   getSwitchState(mRedState, mRedButtonPin);
 }
 

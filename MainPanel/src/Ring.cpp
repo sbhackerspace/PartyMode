@@ -44,7 +44,6 @@ void Ring::showColors(uint8_t wait)
 {
   uint32_t Color;
   unsigned long currentTime;
-  Serial.println("showing Colors!!");
   for (int i = 0; i < mStrip.numPixels(); ++i)
   {
     if (i == mRedPin)

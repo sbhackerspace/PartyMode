@@ -9,7 +9,7 @@
 
 #include <Arduino.h>
 
-#define numInvertedSwitches 8
+#define numInvertedSwitches 9
 
 class Panel
 {
@@ -35,10 +35,14 @@ class Panel
     void getSwitchState(boolean& switchState, int switchPin);
     boolean isInverted(int pinValue) const;
 
+    //private and unimplimented to prevent accidental copying
+    Panel(const Panel&);
+    Panel& operator = (const Panel&);
+
   private:
 
-    static const int mKeyPin, mKeyLed;
-    boolean mKeyState;
+    static const int mLeftKeyPin, mLeftKeyLed, mRightKeyPin, mRightKeyLed;
+    boolean mLeftKeyState, mRightKeyState;
 
     static const int mRedButtonPin, mRedLed;
     boolean mRedState;
