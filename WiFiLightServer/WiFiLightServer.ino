@@ -37,7 +37,7 @@ void setup() {
   // prepare GPIO2
   pinMode(2, OUTPUT);
   digitalWrite(2, HIGH);
-  WiFi.mode(WIFI_AP);
+  WiFi.mode(WIFI_STA);
   connectToWifiNetwork();
 }
 

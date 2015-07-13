@@ -12,7 +12,7 @@ char packetBuffer[2048]; //buffer to hold incoming packet,
 WiFiUDP Udp;
 const uint8_t dataPin  = 2;    // Yellow wire on Adafruit Pixels
 const uint8_t clockPin = 0;
-Adafruit_WS2801 strip = Adafruit_WS2801(381, dataPin, clockPin);
+Adafruit_WS2801 strip = Adafruit_WS2801(320, dataPin, clockPin);
 
 int timeSinceLastPacket;
 const int timeOut = 5000;
@@ -32,7 +32,7 @@ void setup()
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
-  WiFi.mode(WIFI_AP);
+  WiFi.mode(WIFI_STA);
 
   WiFi.begin(ssid, password);
 
