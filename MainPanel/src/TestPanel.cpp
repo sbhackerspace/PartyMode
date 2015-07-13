@@ -1,31 +1,24 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //  Description:
-//    This is the control code for the large panel of the emergency party button
-//
-//  Authors: Mike Kapuscik, Dan Loman
-//
+//    This is the class for the test mode panel
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-#include "TestModePanel.h"
-#include "Ring.h"
-
-TestModePanel panel();
-Ring colorRing;
+#include "TestPanel.h"
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void setup()
+TestPanel::TestPanel()
+  : Panel()
 {
-  Serial.begin(9600);
-  panel.setupPanel();
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void loop()
+void TestPanel::testMode()
 {
-  colorRing.showColors(50);
-  panel.testMode();
+  getSwitchStates();
+  writeLeds();
+  readAndWriteSiren();
 }

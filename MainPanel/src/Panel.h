@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //  Description:
-//    This is a class for party mode panels
+//    This is a base class for party mode panels
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
@@ -15,8 +15,6 @@ class Panel
 {
   public:
 
-	  Panel();
-
     void setupPanel();
 
     void offMode();
@@ -24,7 +22,10 @@ class Panel
     void toggleFlipMode();
     void testMode();
 
-  private:
+  protected:
+
+	  Panel();
+	  Panel(int TotalNumberOfRows, int TotalNumberOfColumns);
 
     void getSwitchStates();
     void writeLeds() const;
@@ -39,8 +40,9 @@ class Panel
     Panel(const Panel&);
     Panel& operator = (const Panel&);
 
-  private:
+  protected:
 
+    int mTotalNumberOfRows, mTotalNumberOfColumns;
     static const int mLeftKeyPin, mLeftKeyLed, mRightKeyPin, mRightKeyLed;
     boolean mLeftKeyState, mRightKeyState;
 

@@ -3,8 +3,28 @@
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-Panel::Panel(void)
-  : mLeftKeyState(false),
+Panel::Panel()
+  : mTotalNumberOfRows(4),
+    mTotalNumberOfColumns(4),
+    mLeftKeyState(false),
+    mRightKeyState(false),
+    mRedState(false),
+    mToggleStates({
+      {false, false, false, false},
+      {false, false, false, false},
+      {false, false, false, false},
+      {false, false, false, false}}),
+    mSideStates({false, false, false, false}),
+    mSirenOffset(15)
+{
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+Panel::Panel(int TotalNumberOfRows, int TotalNumberOfColumns)
+  : mTotalNumberOfRows(TotalNumberOfRows),
+    mTotalNumberOfColumns(TotalNumberOfColumns),
+    mLeftKeyState(false),
     mRightKeyState(false),
     mRedState(false),
     mToggleStates({
@@ -84,15 +104,6 @@ void Panel::offMode()
     }
     digitalWrite(mSideLeds[i], LOW);
   }
-}
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-void Panel::testMode()
-{
-  getSwitchStates();
-  writeLeds();
-  readAndWriteSiren();
 }
 
 //------------------------------------------------------------------------------
