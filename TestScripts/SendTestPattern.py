@@ -2,7 +2,6 @@
 
 MYPORT = 31337
 NumberOfPixels = 381
-#NumberOfPixels = 100
 
 import sys, time
 from socket import *
@@ -14,8 +13,9 @@ def MakePixel(Red, Green, Blue):
 
 ################################################################################
 def SendPacket(Socket, Packet):
-  Socket.sendto(Packet, ('10.18.14.38', MYPORT))
-  Socket.sendto(Packet, ('10.18.14.93', MYPORT))
+  Socket.sendto(Packet, ('10.18.14.38', MYPORT)) #workroom
+  Socket.sendto(Packet, ('10.18.14.93', MYPORT)) #classroom
+  Socket.sendto(Packet, ('10.18.14.99', MYPORT)) #middle
 
 ################################################################################
 def Larson(Socket):

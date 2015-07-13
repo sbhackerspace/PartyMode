@@ -32,6 +32,8 @@ void setup()
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
+  WiFi.mode(WIFI_AP);
+
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED)
