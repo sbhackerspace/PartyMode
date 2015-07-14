@@ -26,36 +26,15 @@ void setup()
   delay(10);
 
   timeSinceLastPacket = 0;
-  // Connect to WiFi network
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-
-  WiFi.mode(WIFI_STA);
-
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.println("WiFi connected");
-
-  // Print the IP address
-  Serial.println(WiFi.localIP());
-  Udp.begin(31337);
-    for(int i = 0; i < strip.numPixels(); i++)
-    {
-      strip.setPixelColor(i, Color(0, 0, 0));
-    }
-    strip.show();
+  connectToWifiNetwork();
 }
 
 void loop()
 {
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    connectToWifiNetwork();
+  }
   int packetSize = Udp.parsePacket();
   Udp.read(packetBuffer,2048);
   if (packetSize >= 460)
@@ -102,4 +81,34 @@ uint32_t Color(byte r, byte g, byte b)
   c <<= 8;
   c |= b;
   return c;
+}
+
+
+void connectToWifiNetwork()
+{
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.mode(WIFI_STA);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+
+  // Print the IP address
+  Serial.println(WiFi.localIP());
+  Udp.begin(31337);
+    for(int i = 0; i < strip.numPixels(); i++)
+    {
+      strip.setPixelColor(i, Color(0, 0, 0));
+    }
+    strip.show();
 }
