@@ -9,6 +9,8 @@
 //------------------------------------------------------------------------------
 
 #include "TestPanel.h"
+#include "LaunchPanel.h"
+#include "PartyModePanel.h"
 #include "Ring.h"
 
 TestPanel panel;

@@ -9,7 +9,7 @@
 
 #include <Arduino.h>
 
-#define numInvertedSwitches 9
+#define numInvertedSwitches 10
 
 class Panel
 {
@@ -17,15 +17,9 @@ class Panel
 
     void setupPanel();
 
-    void offMode();
-    void randomPartyMode();
-    void toggleFlipMode();
-    void testMode();
-
   protected:
 
 	  Panel();
-	  Panel(int TotalNumberOfRows, int TotalNumberOfColumns);
 
     void getSwitchStates();
     void writeLeds() const;
@@ -36,13 +30,18 @@ class Panel
     void getSwitchState(boolean& switchState, int switchPin);
     boolean isInverted(int pinValue) const;
 
+    void rowIncrement(int& Value);
+    void columnIncrement(int& Value);
+
+    void clearStates();
+
     //private and unimplimented to prevent accidental copying
     Panel(const Panel&);
     Panel& operator = (const Panel&);
 
   protected:
 
-    int mTotalNumberOfRows, mTotalNumberOfColumns;
+    const int mTotalNumberOfRows, mTotalNumberOfColumns;
     static const int mLeftKeyPin, mLeftKeyLed, mRightKeyPin, mRightKeyLed;
     boolean mLeftKeyState, mRightKeyState;
 
@@ -61,5 +60,32 @@ class Panel
 
     static const int mInvertedSwitches[numInvertedSwitches];
     const int mSirenOffset;
+
+    long mLastMoveTime;
 };
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+inline
+void Panel::rowIncrement(int& Index)
+{
+  Index++;
+  if (Index >= mTotalNumberOfRows)
+  {
+    Index = 0;
+  }
+  mLastMoveTime = millis();
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+inline
+void Panel::columnIncrement(int& Index)
+{
+  Index++;
+  if (Index >= mTotalNumberOfColumns)
+  {
+    Index = 0;
+  }
+  mLastMoveTime = millis();
+}

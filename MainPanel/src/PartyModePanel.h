@@ -14,10 +14,6 @@ class PartyModePanel : public Panel
   public:
 
 	  PartyModePanel(long ModeDuration);
-	  PartyModePanel(
-      long ModeDuration,
-      int TotalNumberOfRows,
-      int TotalNumberOfColumns);
 
     void partyMode();
 
@@ -27,9 +23,7 @@ class PartyModePanel : public Panel
     void columnRoll();
     void snake();
 
-    void clearStates();
     void goToNextMode();
-    void rollingIncrement(int& Value);
 
     PartyModePanel(const PartyModePanel&);
     PartyModePanel& operator = (const PartyModePanel&);
