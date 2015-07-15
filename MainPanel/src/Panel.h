@@ -23,6 +23,7 @@ class Panel
 
     void getSwitchStates();
     void writeLeds() const;
+    void writeLeds(int ledMap[4][4]) const;
     void readAndWriteSiren() const;
 
     void setupSwitchLed(int Switch, int Led);

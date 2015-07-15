@@ -54,7 +54,7 @@ void Panel::setupPanel()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Panel::writeLeds(void) const
+void Panel::writeLeds() const
 {
   for(int i = 0; i < mTotalNumberOfRows; i++)
   {
@@ -67,6 +67,19 @@ void Panel::writeLeds(void) const
   digitalWrite(mLeftKeyLed, mLeftKeyState);
   digitalWrite(mRightKeyLed, mRightKeyState);
   digitalWrite(mRedLed, mRedState);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Panel::writeLeds(int ledMap[4][4]) const
+{
+  for(int i = 0; i < mTotalNumberOfRows; i++)
+  {
+    for(int j = 0; j < mTotalNumberOfColumns; ++j)
+    {
+      digitalWrite(ledMap[i][j], mToggleStates[i][j]);
+    }
+  }
 }
 
 //------------------------------------------------------------------------------

@@ -13,7 +13,7 @@
 #include "PartyModePanel.h"
 #include "Ring.h"
 
-TestPanel panel;
+LaunchPanel panel;
 Ring colorRing;
 
 //------------------------------------------------------------------------------
@@ -29,5 +29,5 @@ void setup()
 void loop()
 {
   colorRing.showColors(50);
-  panel.testMode();
+  panel.launchMode();
 }

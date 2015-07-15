@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 LaunchPanel::LaunchPanel()
   : Panel(),
+    mInScrollMode(true),
     mLaunchInitialized(false),
     mLaunchSuccess(false),
     mRandomizedTogglePins({{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}}),
@@ -19,7 +20,7 @@ LaunchPanel::LaunchPanel()
     mColumn(0),
     mCorrectToggleState(false),
     mCorrectSideState(false),
-    mTimeout(10000),
+    mTimeout(20000),
     mLastFlashTime(0),
     mProgressCounter(0)
 {
@@ -53,9 +54,21 @@ void LaunchPanel::initializeLaunch()
   }
   mCorrectToggleState = getCorrectState(mRandomizedTogglePins[0][0]);
   mCorrectSideState = getCorrectState(mSideSwitches[0]);
-  digitalWrite(mSideLeds[mRow], !isInverted(mSideLeds[mRow]));
   mLastMoveTime = millis();
-  mLaunchInitialized = true;
+  mLaunchInitialized = mInScrollMode = true;
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void LaunchPanel::clearRandomizedToggles()
+{
+  for (int i = 0; i < mTotalNumberOfRows; ++i)
+  {
+    for (int j = 0; j < mTotalNumberOfColumns; ++j)
+    {
+      mToggleStates[i][j] = isInverted(mRandomizedTogglePins[i][j]);
+    }
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -68,8 +81,28 @@ boolean LaunchPanel::correctToggleAndSwitchFlipped()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void LaunchPanel::turnOnOnlyCompletedLights()
+{
+  clearRandomizedToggles();
+  for(int i = 0; i <= mTotalNumberOfRows; ++i)
+  {
+    for (int j = 0; j < mTotalNumberOfColumns; ++j)
+    {
+      if (i * mTotalNumberOfRows + j < mProgressCounter)
+      {
+        mToggleStates[i][j] = !isInverted(mRandomizedTogglePins[i][j]);
+      }
+    }
+  }
+  writeLeds(mRandomizedToggleLeds);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void LaunchPanel::flashCurrentLed()
 {
+  turnOnOnlyCompletedLights();
+  digitalWrite(mSideLeds[mRow], !isInverted(mSideLeds[mRow]));
   if (millis() - mLastFlashTime > 100)
   {
     mCurrentFlashState = !mCurrentFlashState;
@@ -87,34 +120,111 @@ void LaunchPanel::flashCurrentLed()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::launchMode()
+void LaunchPanel::flashRemainingLeds()
+{
+  turnOnOnlyCompletedLights();
+  digitalWrite(
+    mRandomizedToggleLeds[mScrollRow][mScrollColumn],
+    !isInverted(mRandomizedTogglePins[mScrollRow][mScrollColumn]));
+
+  if (millis() - mLastMoveTime > + random(600) + 50)
+  {
+    columnIncrement(mScrollColumn);
+    if(mScrollColumn == 0)
+    {
+      rowIncrement(mScrollRow);
+    }
+
+    if (!mScrollRow && !mScrollColumn)
+    {
+      mInScrollMode = false;
+    }
+
+    mLastMoveTime = millis();
+  }
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void LaunchPanel::incrementToggle()
+{
+  mProgressCounter++;
+
+  columnIncrement(mColumn);
+  if (mColumn == 0)
+  {
+    rowIncrement(mRow);
+    if (!mRow && !mColumn)
+    {
+      mLaunchSuccess = true;
+    }
+  }
+
+  digitalWrite(mSideLeds[mRow], !isInverted(mSideLeds[mRow]));
+
+  mCorrectToggleState = getCorrectState(mRandomizedTogglePins[mRow][mColumn]);
+  mCorrectSideState = getCorrectState(mSideSwitches[mRow]);
+
+  mScrollRow = mRow;
+  mScrollColumn = mColumn;
+  mInScrollMode = true;
+  mLastMoveTime = millis();
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void LaunchPanel::temporarySuccesMethod()
+{
+  clearStates();
+  writeLeds();
+  if (millis() - mLastFlashTime > 100)
+  {
+    mCurrentFlashState = !mCurrentFlashState;
+    mLastFlashTime = millis();
+  }
+  if (mCurrentFlashState)
+  {
+    digitalWrite(mRedLed, HIGH);
+  }
+  else
+  {
+    digitalWrite(mRedLed, LOW);
+  }
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+boolean LaunchPanel::launchMode()
 {
   if (!mLaunchInitialized)
   {
     initializeLaunch();
   }
 
+  if (mLaunchSuccess)
+  {
+    temporarySuccesMethod();
+    return true;
+  }
+
   if (millis() - mLastMoveTime > mTimeout)
   {
     mLaunchInitialized = false;
-    return;
+    return false;
   }
 
   if (correctToggleAndSwitchFlipped())
   {
-    mProgressCounter++;
-    digitalWrite(
-      mRandomizedToggleLeds[mRow][mColumn],
-      isInverted(mRandomizedTogglePins[mRow][mColumn]));
-    columnIncrement(mColumn);
-    if (mColumn == 0)
-    {
-      rowIncrement(mRow);
-    }
-    digitalWrite(mSideLeds[mRow], !isInverted(mSideLeds[mRow]));
-    mCorrectToggleState = getCorrectState(mRandomizedTogglePins[mRow][mColumn]);
-    mCorrectSideState = getCorrectState(mSideSwitches[mRow]);
-    mLastMoveTime = millis();
+    incrementToggle();
   }
-  flashCurrentLed();
+
+  if (mInScrollMode)
+  {
+    flashRemainingLeds();
+  }
+  else
+  {
+    flashCurrentLed();
+  }
+  return false;
 }
