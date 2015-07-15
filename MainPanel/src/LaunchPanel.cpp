@@ -54,6 +54,12 @@ void LaunchPanel::initializeLaunch()
   }
   mCorrectToggleState = getCorrectState(mRandomizedTogglePins[0][0]);
   mCorrectSideState = getCorrectState(mSideSwitches[0]);
+  getRandomizedSwitchStates(
+    mRandomizedToggleStates,
+    mSideStates,
+    mLeftKeyState,
+    mRightKeyState,
+    mRedState);
   mLastMoveTime = millis();
   mLaunchInitialized = mInScrollMode = true;
 }
@@ -73,10 +79,71 @@ void LaunchPanel::clearRandomizedToggles()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void LaunchPanel::getRandomizedSwitchStates(
+  boolean toggleStates[4][4],
+  boolean sideStates[4],
+  boolean& leftKeyState,
+  boolean& rightKeyState,
+  boolean& redState)
+{
+  for(int i = 0; i < mTotalNumberOfRows; i++)
+  {
+    for(int j = 0; j < mTotalNumberOfColumns; ++j)
+    {
+      getSwitchState(toggleStates[i][j], mRandomizedTogglePins[i][j]);
+    }
+    getSwitchState(sideStates[i], mSideSwitches[i]);
+  }
+  getSwitchState(leftKeyState, mLeftKeyPin);
+  getSwitchState(rightKeyState, mRightKeyPin);
+  getSwitchState(redState, mRedButtonPin);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 boolean LaunchPanel::correctToggleAndSwitchFlipped()
 {
   return ((mCorrectToggleState == digitalRead(mRandomizedTogglePins[mRow][mColumn])) &&
   (mCorrectSideState == digitalRead(mSideSwitches[mRow])));
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+boolean LaunchPanel::incorrectToggleOrSwitchFlipped()
+{
+  boolean toggleStates[4][4];
+  boolean sideStates[4];
+  boolean leftKeyState, rightKeyState, redState;
+  getRandomizedSwitchStates(
+    toggleStates,
+    sideStates,
+    leftKeyState,
+    rightKeyState,
+    redState);
+  for (int i = 0; i < mTotalNumberOfRows; ++i)
+  {
+    for (int j =0; j < mTotalNumberOfColumns; ++j)
+    {
+      if
+        ((toggleStates[i][j] != mRandomizedToggleStates[i][j]) &&
+        (!((i == mRow) && (j == mColumn))))
+      {
+        return true;
+      }
+    }
+    if ((sideStates[i] != mSideStates[i]) && (i != mRow))
+    {
+      return true;
+    }
+  }
+  if
+    ((leftKeyState != mLeftKeyState) ||
+     (rightKeyState != mRightKeyState) ||
+     (redState != mRedState))
+  {
+    return true;
+  }
+  return false;
 }
 
 //------------------------------------------------------------------------------
@@ -164,6 +231,12 @@ void LaunchPanel::incrementToggle()
 
   mCorrectToggleState = getCorrectState(mRandomizedTogglePins[mRow][mColumn]);
   mCorrectSideState = getCorrectState(mSideSwitches[mRow]);
+  getRandomizedSwitchStates(
+    mRandomizedToggleStates,
+    mSideStates,
+    mLeftKeyState,
+    mRightKeyState,
+    mRedState);
 
   mScrollRow = mRow;
   mScrollColumn = mColumn;
@@ -217,6 +290,12 @@ boolean LaunchPanel::launchMode()
   {
     incrementToggle();
   }
+  else if(incorrectToggleOrSwitchFlipped())
+  {
+    fail();
+    mLaunchInitialized = false;
+  }
+
 
   if (mInScrollMode)
   {

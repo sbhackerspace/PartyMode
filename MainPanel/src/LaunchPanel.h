@@ -24,6 +24,15 @@ class LaunchPanel : public Panel
     void clearRandomizedToggles();
 
     boolean correctToggleAndSwitchFlipped();
+    boolean incorrectToggleOrSwitchFlipped();
+
+    void getRandomizedSwitchStates(
+      boolean toggleStates[4][4],
+      boolean sideStates[4],
+      boolean& leftKeyState,
+      boolean& rightKeyState,
+      boolean& redState);
+
     boolean getCorrectState(int pin);
 
     void flashCurrentLed();
@@ -45,6 +54,7 @@ class LaunchPanel : public Panel
     boolean mLaunchSuccess;
     int mRandomizedTogglePins[4][4];
     int mRandomizedToggleLeds[4][4];
+    boolean mRandomizedToggleStates[4][4];
     int mRow, mColumn;
     int mScrollRow, mScrollColumn;
     boolean mCorrectToggleState, mCorrectSideState;

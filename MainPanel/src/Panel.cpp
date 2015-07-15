@@ -134,7 +134,6 @@ void Panel::getSwitchStates()
   }
   getSwitchState(mLeftKeyState, mLeftKeyPin);
   getSwitchState(mRightKeyState, mRightKeyPin);
-  Serial.println(mRightKeyState);
   getSwitchState(mRedState, mRedButtonPin);
 }
 
@@ -150,9 +149,28 @@ void Panel::clearStates()
     }
       mSideStates[i] = !isInverted(mSideSwitches[i]);
   }
-  Serial.println();
   mRightKeyState = !isInverted(mRightKeyPin);
   mLeftKeyState = !isInverted(mLeftKeyPin);
   mRedState = !isInverted(mRedButtonPin);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Panel::fail()
+{
+  clearStates();
+  writeLeds();
+  for (int i = 0; i <100; ++i)
+  {
+    analogWrite(13, i);
+    analogWrite(mRedLed, i);
+    delay(6);
+  }
+  for (int i = 100; i >= 0; --i)
+  {
+    analogWrite(13, i);
+    analogWrite(mRedLed, i);
+    delay(6);
+  }
 }
 

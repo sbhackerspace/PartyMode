@@ -36,6 +36,8 @@ class Panel
 
     void clearStates();
 
+    void fail();
+
     //private and unimplimented to prevent accidental copying
     Panel(const Panel&);
     Panel& operator = (const Panel&);
