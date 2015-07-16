@@ -11,9 +11,10 @@
 #include "TestPanel.h"
 #include "LaunchPanel.h"
 #include "PartyModePanel.h"
+#include "DialPanel.h"
 #include "Ring.h"
 
-LaunchPanel panel;
+TestPanel panel;
 Ring colorRing;
 
 //------------------------------------------------------------------------------
@@ -28,6 +29,6 @@ void setup()
 //------------------------------------------------------------------------------
 void loop()
 {
-  colorRing.showColors(50);
-  panel.launchMode();
+  colorRing.colorRing(50);
+  panel.testMode();
 }

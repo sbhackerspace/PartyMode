@@ -19,7 +19,19 @@ class Ring{
 
     Ring();
 
-    void showColors(uint8_t writeDelay);
+    void colorRing(uint8_t writeDelay);
+
+    void initializeColorRing();
+
+    int  getNumPixels() const;
+
+    uint32_t getColor(int Red, int Green, int Blue) const;
+
+    void setPixelColor(int index, uint32_t color);
+
+    void show();
+
+    void clearRing();
 
   private:
 
@@ -34,4 +46,12 @@ class Ring{
 
     Adafruit_NeoPixel mStrip;
 };
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+inline
+int Ring::getNumPixels() const
+{
+  return mStrip.numPixels();
+}
 
