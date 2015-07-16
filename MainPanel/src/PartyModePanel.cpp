@@ -12,23 +12,6 @@
 PartyModePanel::PartyModePanel(long ModeDuration)
   : Panel(),
     mCurrentModeStartTime(0),
-    mLastMoveTime(0),
-    mModeDuration(ModeDuration),
-    mCurrentMode(eSnake),
-    mRow(0),
-    mColumn(0)
-{
-}
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-PartyModePanel::PartyModePanel(
-  long ModeDuration,
-  int TotalNumberOfRows,
-  int TotalNumberOfColumns)
-  : Panel(TotalNumberOfRows, TotalNumberOfColumns),
-    mCurrentModeStartTime(0),
-    mLastMoveTime(0),
     mModeDuration(ModeDuration),
     mCurrentMode(eSnake),
     mRow(0),
@@ -60,17 +43,6 @@ void PartyModePanel::goToNextMode()
 
   mCurrentModeStartTime = mLastMoveTime = millis();
 }
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-void PartyModePanel::rollingIncrement(int& Index)
-{
-  Index++;
-  if (Index > 3)
-  {
-    Index = 0;
-  }
-  mLastMoveTime = millis();
-}
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -78,7 +50,7 @@ void PartyModePanel::rowRoll()
 {
   if (millis() - mLastMoveTime > mModeDuration/40)
   {
-    rollingIncrement(mRow);
+    rowIncrement(mRow);
   }
   for (int i = 0; i < mTotalNumberOfRows; ++i)
   {
@@ -92,7 +64,7 @@ void PartyModePanel::columnRoll()
 {
   if (millis() - mLastMoveTime > mModeDuration/40)
   {
-    rollingIncrement(mColumn);
+    columnIncrement(mColumn);
   }
   for (int i = 0; i < mTotalNumberOfColumns; ++i)
   {
@@ -107,10 +79,10 @@ void PartyModePanel::snake()
   long currentTime = millis();
   if (currentTime - mLastMoveTime > mModeDuration/40)
   {
-    rollingIncrement(mColumn);
+    columnIncrement(mColumn);
     if (mColumn == 0)
     {
-      rollingIncrement(mRow);
+      rowIncrement(mRow);
     }
   }
   mToggleStates[mRow][mColumn] = !isInverted(mToggleMap[mRow][mColumn]);
@@ -143,23 +115,6 @@ void PartyModePanel::snake()
     mToggleStates[mRow][mColumn - 1] = !isInverted(mToggleMap[mRow][mColumn]);
     mToggleStates[mRow][mColumn - 2] = !isInverted(mToggleMap[mRow][mColumn]);
   }
-}
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-void PartyModePanel::clearStates()
-{
-  for (int i = 0; i < mTotalNumberOfRows; ++i)
-  {
-    for (int j = 0; j < mTotalNumberOfColumns; ++j)
-    {
-      mToggleStates[i][j] = isInverted(mToggleMap[i][j]);
-    }
-      mSideStates[i] = !isInverted(mSideSwitches[i]);
-  }
-  mRightKeyState = isInverted(mRightKeyPin);
-  mLeftKeyState = isInverted(mLeftKeyPin);
-  mRedState = isInverted(mRedButtonPin);
 }
 
 //------------------------------------------------------------------------------

@@ -20,6 +20,16 @@ Ring::Ring()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void Ring::initializeColorRing()
+{
+  mRedPin = 0;
+  mGreenPin = 8;
+  mBluePin = 16;
+  mTimeSinceLastRingLedWrite = millis();
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Ring::incrementPin(int& pin)
 {
   pin++;
@@ -40,7 +50,19 @@ void Ring::incrementPins()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Ring::showColors(uint8_t wait)
+void Ring::clearRing()
+{
+  uint32_t color = mStrip.Color(0, 0, 0);
+  for (int i = 0; i < mStrip.numPixels(); ++i)
+  {
+    mStrip.setPixelColor(i, color);
+  }
+  mStrip.show();
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Ring::colorRing(uint8_t wait)
 {
   uint32_t Color;
   unsigned long currentTime;
@@ -71,4 +93,19 @@ void Ring::showColors(uint8_t wait)
       mTimeSinceLastRingLedWrite = millis();
     }
   }
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+uint32_t Ring::getColor(int Red, int Green, int Blue) const
+{
+  return mStrip.Color(Red, Green, Blue);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Ring::setPixelColor(int index, uint32_t color)
+{
+  mStrip.setPixelColor(index, color);
+  mStrip.show();
 }

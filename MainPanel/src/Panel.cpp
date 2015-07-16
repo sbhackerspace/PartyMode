@@ -15,26 +15,10 @@ Panel::Panel()
       {false, false, false, false},
       {false, false, false, false}}),
     mSideStates({false, false, false, false}),
-    mSirenOffset(15)
+    mSirenOffset(0),
+    mLastMoveTime(0)
 {
-}
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-Panel::Panel(int TotalNumberOfRows, int TotalNumberOfColumns)
-  : mTotalNumberOfRows(TotalNumberOfRows),
-    mTotalNumberOfColumns(TotalNumberOfColumns),
-    mLeftKeyState(false),
-    mRightKeyState(false),
-    mRedState(false),
-    mToggleStates({
-      {false, false, false, false},
-      {false, false, false, false},
-      {false, false, false, false},
-      {false, false, false, false}}),
-    mSideStates({false, false, false, false}),
-    mSirenOffset(analogRead(mKnobPin))
-{
+  clearStates();
 }
 
 //------------------------------------------------------------------------------
@@ -43,16 +27,18 @@ void Panel::setupSwitchLed(int Switch, int Led)
 {
   pinMode(Switch, INPUT_PULLUP);
   pinMode(Led, OUTPUT);
-  digitalWrite(Led, LOW);
+  randomSeed(analogRead(0));
+  clearStates();
+  writeLeds();
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void Panel::setupPanel()
 {
-  for(int i = 0; i < 4; i++)
+  for(int i = 0; i < mTotalNumberOfRows; i++)
   {
-    for(int j = 0; j < 4; ++j)
+    for(int j = 0; j < mTotalNumberOfColumns; ++j)
     {
       pinMode(mToggleLeds[i][j], OUTPUT);
       pinMode(mToggleMap[i][j], INPUT_PULLUP);
@@ -68,11 +54,11 @@ void Panel::setupPanel()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Panel::writeLeds(void) const
+void Panel::writeLeds() const
 {
-  for(int i = 0; i < 4; i++)
+  for(int i = 0; i < mTotalNumberOfRows; i++)
   {
-    for(int j = 0; j < 4; ++j)
+    for(int j = 0; j < mTotalNumberOfColumns; ++j)
     {
       digitalWrite(mToggleLeds[i][j], mToggleStates[i][j]);
     }
@@ -85,25 +71,24 @@ void Panel::writeLeds(void) const
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void Panel::writeLeds(int ledMap[4][4]) const
+{
+  for(int i = 0; i < mTotalNumberOfRows; i++)
+  {
+    for(int j = 0; j < mTotalNumberOfColumns; ++j)
+    {
+      digitalWrite(ledMap[i][j], mToggleStates[i][j]);
+    }
+  }
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void Panel::readAndWriteSiren() const
 {
   int knobValue = analogRead(mKnobPin);
   knobValue = map(knobValue, mSirenOffset, 1024, 0, 255);
   analogWrite(13, knobValue);
-}
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-void Panel::offMode()
-{
-  for(int i = 0; i < 4; i++)
-  {
-    for(int j = 0; j < 4; ++j)
-    {
-      digitalWrite(mToggleLeds[i][j], LOW);
-    }
-    digitalWrite(mSideLeds[i], LOW);
-  }
 }
 
 //------------------------------------------------------------------------------
@@ -139,9 +124,9 @@ void Panel::getSwitchState(boolean& switchState, int switchPin)
 //------------------------------------------------------------------------------
 void Panel::getSwitchStates()
 {
-  for(int i = 0; i < 4; i++)
+  for(int i = 0; i < mTotalNumberOfRows; i++)
   {
-    for(int j = 0; j < 4; ++j)
+    for(int j = 0; j < mTotalNumberOfColumns; ++j)
     {
       getSwitchState(mToggleStates[i][j], mToggleMap[i][j]);
     }
@@ -149,7 +134,43 @@ void Panel::getSwitchStates()
   }
   getSwitchState(mLeftKeyState, mLeftKeyPin);
   getSwitchState(mRightKeyState, mRightKeyPin);
-  Serial.println(mRightKeyState);
   getSwitchState(mRedState, mRedButtonPin);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Panel::clearStates()
+{
+  for (int i = 0; i < mTotalNumberOfRows; ++i)
+  {
+    for (int j = 0; j < mTotalNumberOfColumns; ++j)
+    {
+      mToggleStates[i][j] = isInverted(mToggleMap[i][j]);
+    }
+      mSideStates[i] = !isInverted(mSideSwitches[i]);
+  }
+  mRightKeyState = !isInverted(mRightKeyPin);
+  mLeftKeyState = !isInverted(mLeftKeyPin);
+  mRedState = !isInverted(mRedButtonPin);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Panel::fail()
+{
+  clearStates();
+  writeLeds();
+  for (int i = 0; i <100; ++i)
+  {
+    analogWrite(13, i);
+    analogWrite(mRedLed, i);
+    delay(6);
+  }
+  for (int i = 100; i >= 0; --i)
+  {
+    analogWrite(13, i);
+    analogWrite(mRedLed, i);
+    delay(6);
+  }
 }
 
