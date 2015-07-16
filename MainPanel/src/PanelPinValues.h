@@ -14,6 +14,8 @@ const int Panel::mRightKeyLed = 14;
 const int Panel::mRedButtonPin = 15;
 const int Panel::mRedLed	= 12;
 const int Panel::mKnobPin = A9;
+const int Panel::mMainPowerSwitch = A13;
+const int Panel::mSirenPin = 13;
 
 const int Panel::mToggleMap[4][4] = {{42, 50, 44, 45},
                        				{21, 47, 49, 48},

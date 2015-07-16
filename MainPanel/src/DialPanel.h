@@ -9,8 +9,6 @@
 
 #include "Panel.h"
 
-#include "Ring.h"
-
 class DialPanel : public Panel
 {
   public:
@@ -31,8 +29,6 @@ class DialPanel : public Panel
     DialPanel& operator = (const DialPanel&);
 
   private:
-
-    Ring& mRing;
 
     boolean mDialModeInitialized;
 

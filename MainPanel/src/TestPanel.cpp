@@ -18,7 +18,17 @@ TestPanel::TestPanel()
 //------------------------------------------------------------------------------
 void TestPanel::testMode()
 {
-  getSwitchStates();
-  writeLeds();
-  readAndWriteSiren();
+  if (isPanelOn())
+  {
+    getSwitchStates();
+    writeLeds();
+    readAndWriteSiren();
+    mRing.colorRing(50);
+  }
+  else
+  {
+    clearStates();
+    writeLeds();
+    mRing.clearRing();
+  }
 }

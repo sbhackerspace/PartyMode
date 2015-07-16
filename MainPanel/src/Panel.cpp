@@ -6,6 +6,7 @@
 Panel::Panel()
   : mTotalNumberOfRows(4),
     mTotalNumberOfColumns(4),
+    mRing(),
     mLeftKeyState(false),
     mRightKeyState(false),
     mRedState(false),
@@ -15,7 +16,6 @@ Panel::Panel()
       {false, false, false, false},
       {false, false, false, false}}),
     mSideStates({false, false, false, false}),
-    mSirenOffset(0),
     mLastMoveTime(0)
 {
   clearStates();
@@ -50,6 +50,9 @@ void Panel::setupPanel()
   setupSwitchLed(mLeftKeyPin, mLeftKeyLed);
   setupSwitchLed(mRightKeyPin, mRightKeyLed);
   setupSwitchLed(mRedButtonPin, mRedLed);
+
+  pinMode(mMainPowerSwitch, INPUT);
+  digitalWrite(mMainPowerSwitch, HIGH);
 }
 
 //------------------------------------------------------------------------------
@@ -67,6 +70,8 @@ void Panel::writeLeds() const
   digitalWrite(mLeftKeyLed, mLeftKeyState);
   digitalWrite(mRightKeyLed, mRightKeyState);
   digitalWrite(mRedLed, mRedState);
+  Serial.println(mRedState);
+  analogWrite(mSirenPin, mSirenValue);
 }
 
 //------------------------------------------------------------------------------
@@ -87,8 +92,8 @@ void Panel::writeLeds(int ledMap[4][4]) const
 void Panel::readAndWriteSiren() const
 {
   int knobValue = analogRead(mKnobPin);
-  knobValue = map(knobValue, mSirenOffset, 1024, 0, 255);
-  analogWrite(13, knobValue);
+  knobValue = map(knobValue, 0, 1024, 0, 255);
+  analogWrite(mSirenPin, knobValue);
 }
 
 //------------------------------------------------------------------------------
@@ -152,6 +157,14 @@ void Panel::clearStates()
   mRightKeyState = !isInverted(mRightKeyPin);
   mLeftKeyState = !isInverted(mLeftKeyPin);
   mRedState = !isInverted(mRedButtonPin);
+  mSirenValue = 0;
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+boolean Panel::isPanelOn()
+{
+  return !digitalRead(mMainPowerSwitch);
 }
 
 //------------------------------------------------------------------------------
@@ -162,13 +175,13 @@ void Panel::fail()
   writeLeds();
   for (int i = 0; i <100; ++i)
   {
-    analogWrite(13, i);
+    analogWrite(mSirenPin, i);
     analogWrite(mRedLed, i);
     delay(6);
   }
   for (int i = 100; i >= 0; --i)
   {
-    analogWrite(13, i);
+    analogWrite(mSirenPin, i);
     analogWrite(mRedLed, i);
     delay(6);
   }

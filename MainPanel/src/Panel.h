@@ -9,6 +9,8 @@
 
 #include <Arduino.h>
 
+#include "Ring.h"
+
 #define numInvertedSwitches 10
 
 class Panel
@@ -36,6 +38,8 @@ class Panel
 
     void clearStates();
 
+    boolean isPanelOn();
+
     void fail();
 
     //private and unimplimented to prevent accidental copying
@@ -45,7 +49,13 @@ class Panel
   protected:
 
     const int mTotalNumberOfRows, mTotalNumberOfColumns;
+    Ring mRing;
     static const int mLeftKeyPin, mLeftKeyLed, mRightKeyPin, mRightKeyLed;
+
+    static const int mSirenPin;
+    int mSirenValue;
+
+    static const int mMainPowerSwitch;
     boolean mLeftKeyState, mRightKeyState;
 
     static const int mRedButtonPin, mRedLed;
@@ -62,7 +72,6 @@ class Panel
     boolean mSideStates[4];
 
     static const int mInvertedSwitches[numInvertedSwitches];
-    const int mSirenOffset;
 
     long mLastMoveTime;
 };

@@ -11,7 +11,6 @@
 //------------------------------------------------------------------------------
 DialPanel::DialPanel(Ring& ring)
   : Panel(),
-    mRing(ring),
     mDialModeInitialized(false),
     mCurrentDistance(0),
     mKnobFinalValue(0),
