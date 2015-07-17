@@ -19,9 +19,13 @@ class Panel
 
     void setupPanel();
 
+    boolean isPanelOn();
+
+    void offMode();
+
   protected:
 
-	  Panel();
+	  Panel(Ring& ring);
 
     void getSwitchStates();
     void writeLeds() const;
@@ -37,8 +41,7 @@ class Panel
     void columnIncrement(int& Value);
 
     void clearStates();
-
-    boolean isPanelOn();
+    void allStatesOn();
 
     void fail();
 
@@ -49,7 +52,7 @@ class Panel
   protected:
 
     const int mTotalNumberOfRows, mTotalNumberOfColumns;
-    Ring mRing;
+    Ring& mRing;
     static const int mLeftKeyPin, mLeftKeyLed, mRightKeyPin, mRightKeyLed;
 
     static const int mSirenPin;

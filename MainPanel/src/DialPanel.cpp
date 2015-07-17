@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 DialPanel::DialPanel(Ring& ring)
-  : Panel(),
+  : Panel(ring),
     mDialModeInitialized(false),
     mCurrentDistance(0),
     mKnobFinalValue(0),
@@ -93,7 +93,7 @@ void DialPanel::writeRing()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void DialPanel::dialMode()
+boolean DialPanel::dialMode()
 {
   if (!mDialModeInitialized)
   {
@@ -114,9 +114,14 @@ void DialPanel::dialMode()
   }
   writeRing();
 
+
+  Serial.println(currentPosition);
+  Serial.println(mKnobFinalValue);
   if (abs(currentPosition - mKnobFinalValue) < 5)
   {
-    fail(); //TODO Change to success
+    mRing.clearRing();
+    Serial.println("success");
+    return true;
   }
-
+  return false;
 }

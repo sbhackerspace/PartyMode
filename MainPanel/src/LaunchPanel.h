@@ -13,13 +13,13 @@ class LaunchPanel : public Panel
 {
   public:
 
-	  LaunchPanel();
+	  LaunchPanel(Ring& ring);
 
     boolean launchMode();
 
-  private:
-
     void initializeLaunch();
+
+  private:
 
     void clearRandomizedToggles();
 
@@ -47,10 +47,13 @@ class LaunchPanel : public Panel
     LaunchPanel(const LaunchPanel&);
     LaunchPanel& operator = (const LaunchPanel&);
 
+  protected:
+
+    boolean mLaunchInitialized;
+
   private:
 
     boolean mInScrollMode;
-    boolean mLaunchInitialized;
     boolean mLaunchSuccess;
     int mRandomizedTogglePins[4][4];
     int mRandomizedToggleLeds[4][4];
