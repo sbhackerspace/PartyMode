@@ -32,6 +32,7 @@ void LaunchPanel::initializeLaunch()
 {
   clearStates();
   writeLeds();
+  mRing.clearRing();
   mProgressCounter = mRow = mColumn = 0;
   int Temp, randomRow, randomColumn;
   memcpy(mRandomizedTogglePins, mToggleMap, sizeof(mToggleMap));
@@ -111,6 +112,7 @@ boolean LaunchPanel::correctToggleAndSwitchFlipped()
 //------------------------------------------------------------------------------
 boolean LaunchPanel::incorrectToggleOrSwitchFlipped()
 {
+  delay(20);
   boolean toggleStates[4][4];
   boolean sideStates[4];
   boolean leftKeyState, rightKeyState, redState;
@@ -246,27 +248,6 @@ void LaunchPanel::incrementToggle()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::temporarySuccesMethod()
-{
-  clearStates();
-  writeLeds();
-  if (millis() - mLastFlashTime > 100)
-  {
-    mCurrentFlashState = !mCurrentFlashState;
-    mLastFlashTime = millis();
-  }
-  if (mCurrentFlashState)
-  {
-    digitalWrite(mRedLed, HIGH);
-  }
-  else
-  {
-    digitalWrite(mRedLed, LOW);
-  }
-}
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 boolean LaunchPanel::launchMode()
 {
   if (!mLaunchInitialized)
@@ -276,7 +257,6 @@ boolean LaunchPanel::launchMode()
 
   if (mLaunchSuccess)
   {
-    temporarySuccesMethod();
     return true;
   }
 
@@ -295,7 +275,6 @@ boolean LaunchPanel::launchMode()
     fail();
     mLaunchInitialized = false;
   }
-
 
   if (mInScrollMode)
   {

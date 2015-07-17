@@ -70,7 +70,6 @@ void Panel::writeLeds() const
   digitalWrite(mLeftKeyLed, mLeftKeyState);
   digitalWrite(mRightKeyLed, mRightKeyState);
   digitalWrite(mRedLed, mRedState);
-  Serial.println(mRedState);
   analogWrite(mSirenPin, mSirenValue);
 }
 
@@ -162,6 +161,24 @@ void Panel::clearStates()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void Panel::allStatesOn()
+{
+  for (int i = 0; i < mTotalNumberOfRows; ++i)
+  {
+    for (int j = 0; j < mTotalNumberOfColumns; ++j)
+    {
+      mToggleStates[i][j] = !isInverted(mToggleMap[i][j]);
+    }
+      mSideStates[i] = isInverted(mSideSwitches[i]);
+  }
+  mRightKeyState = isInverted(mRightKeyPin);
+  mLeftKeyState = isInverted(mLeftKeyPin);
+  mRedState = isInverted(mRedButtonPin);
+  mSirenValue = 255;
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 boolean Panel::isPanelOn()
 {
   return !digitalRead(mMainPowerSwitch);
@@ -181,17 +198,17 @@ void Panel::fail()
 {
   clearStates();
   writeLeds();
-  for (int i = 0; i <100; ++i)
-  {
-    analogWrite(mSirenPin, i);
-    analogWrite(mRedLed, i);
-    delay(6);
-  }
-  for (int i = 100; i >= 0; --i)
-  {
-    analogWrite(mSirenPin, i);
-    analogWrite(mRedLed, i);
-    delay(6);
-  }
+  //for (int i = 0; i <100; ++i)
+  //{
+  //analogWrite(mSirenPin, i);
+  //analogWrite(mRedLed, i);
+  //delay(6);
+  //}
+  //for (int i = 100; i >= 0; --i)
+  //{
+  //analogWrite(mSirenPin, i);
+  //analogWrite(mRedLed, i);
+  //delay(6);
+  //}
 }
 

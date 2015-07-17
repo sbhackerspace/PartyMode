@@ -41,6 +41,7 @@ class Panel
     void columnIncrement(int& Value);
 
     void clearStates();
+    void allStatesOn();
 
     void fail();
 

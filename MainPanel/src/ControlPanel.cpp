@@ -42,6 +42,7 @@ void ControlPanel::run()
         if (mDialPanel.dialMode())
         {
           mMode = eKeyTurnMode;
+          Serial.println("keymode");
         }
         break;
       case eKeyTurnMode:

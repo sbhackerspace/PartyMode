@@ -22,9 +22,10 @@ KeyTurnPanel::KeyTurnPanel(Ring& ring)
 //------------------------------------------------------------------------------
 void KeyTurnPanel::toggleKeyLights()
 {
-  if (millis() - mLastMoveTime > 100)
+  if (millis() - mLastMoveTime > 1000)
   {
     mToggleState = !mToggleState;
+    mLastMoveTime = millis();
   }
   digitalWrite(mLeftKeyLed, mToggleState);
   digitalWrite(mRightKeyLed, mToggleState);
@@ -39,6 +40,11 @@ boolean KeyTurnPanel::haveKeysBeenSimultaneouslyTurned()
      mRightKeyState &&
      (abs(mLeftTurnTime - mRightTurnTime) > mMaxKeyTurnTime))
   {
+    allStatesOn();
+    writeLeds();
+    delay(50);
+    clearStates();
+    writeLeds();
     return true;
   }
   return false;

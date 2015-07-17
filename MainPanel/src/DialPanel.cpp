@@ -114,8 +114,13 @@ boolean DialPanel::dialMode()
   }
   writeRing();
 
+
+  Serial.println(currentPosition);
+  Serial.println(mKnobFinalValue);
   if (abs(currentPosition - mKnobFinalValue) < 5)
   {
+    mRing.clearRing();
+    Serial.println("success");
     return true;
   }
   return false;
