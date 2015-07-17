@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 DialPanel::DialPanel(Ring& ring)
-  : Panel(),
+  : Panel(ring),
     mDialModeInitialized(false),
     mCurrentDistance(0),
     mKnobFinalValue(0),
@@ -93,7 +93,7 @@ void DialPanel::writeRing()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void DialPanel::dialMode()
+boolean DialPanel::dialMode()
 {
   if (!mDialModeInitialized)
   {
@@ -116,7 +116,7 @@ void DialPanel::dialMode()
 
   if (abs(currentPosition - mKnobFinalValue) < 5)
   {
-    fail(); //TODO Change to success
+    return true;
   }
-
+  return false;
 }

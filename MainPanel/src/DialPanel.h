@@ -15,11 +15,11 @@ class DialPanel : public Panel
 
 	  DialPanel(Ring& ring);
 
-    void dialMode();
-
-  private:
+    boolean dialMode();
 
     void initializeDialMode();
+
+  private:
 
     void writeRing();
 
@@ -28,9 +28,12 @@ class DialPanel : public Panel
     DialPanel(const DialPanel&);
     DialPanel& operator = (const DialPanel&);
 
-  private:
+  protected:
 
     boolean mDialModeInitialized;
+
+  private:
+
 
     int mCurrentDistance;
     int mKnobFinalValue;

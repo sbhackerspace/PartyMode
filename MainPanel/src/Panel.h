@@ -19,9 +19,13 @@ class Panel
 
     void setupPanel();
 
+    boolean isPanelOn();
+
+    void offMode();
+
   protected:
 
-	  Panel();
+	  Panel(Ring& ring);
 
     void getSwitchStates();
     void writeLeds() const;
@@ -38,8 +42,6 @@ class Panel
 
     void clearStates();
 
-    boolean isPanelOn();
-
     void fail();
 
     //private and unimplimented to prevent accidental copying
@@ -49,7 +51,7 @@ class Panel
   protected:
 
     const int mTotalNumberOfRows, mTotalNumberOfColumns;
-    Ring mRing;
+    Ring& mRing;
     static const int mLeftKeyPin, mLeftKeyLed, mRightKeyPin, mRightKeyLed;
 
     static const int mSirenPin;

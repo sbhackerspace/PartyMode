@@ -9,8 +9,8 @@
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-KeyTurnPanel::KeyTurnPanel()
-  : Panel(),
+KeyTurnPanel::KeyTurnPanel(Ring& ring)
+  : Panel(ring),
     mToggleState(true),
     mLeftTurnTime(0),
     mRightTurnTime(0),
@@ -63,11 +63,11 @@ boolean KeyTurnPanel::getKeyStateChange(
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void KeyTurnPanel::keyMode()
+boolean KeyTurnPanel::keyMode()
 {
   if (haveKeysBeenSimultaneouslyTurned())
   {
-    fail(); //TODO make a success mode
+    return true;
   }
 
   if (!mLeftKeyState)
@@ -79,4 +79,5 @@ void KeyTurnPanel::keyMode()
     getKeyStateChange(mRightKeyPin, mRightKeyState, mRightTurnTime);
   }
   toggleKeyLights();
+  return false;
 }

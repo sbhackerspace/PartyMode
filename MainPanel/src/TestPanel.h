@@ -13,7 +13,7 @@ class TestPanel : public Panel
 {
   public:
 
-	  TestPanel();
+	  TestPanel(Ring& ring);
 
     void testMode();
 

@@ -9,8 +9,8 @@
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-LaunchPanel::LaunchPanel()
-  : Panel(),
+LaunchPanel::LaunchPanel(Ring& ring)
+  : Panel(ring),
     mInScrollMode(true),
     mLaunchInitialized(false),
     mLaunchSuccess(false),

@@ -13,9 +13,9 @@ class KeyTurnPanel : public Panel
 {
   public:
 
-	  KeyTurnPanel();
+	  KeyTurnPanel(Ring& ring);
 
-    void keyMode();
+    boolean keyMode();
 
   private:
 

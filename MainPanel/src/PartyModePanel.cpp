@@ -9,8 +9,8 @@
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-PartyModePanel::PartyModePanel(long ModeDuration)
-  : Panel(),
+PartyModePanel::PartyModePanel(Ring& ring, long ModeDuration)
+  : Panel(ring),
     mCurrentModeStartTime(0),
     mModeDuration(ModeDuration),
     mCurrentMode(eSnake),

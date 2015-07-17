@@ -13,7 +13,7 @@ class PartyModePanel : public Panel
 {
   public:
 
-	  PartyModePanel(long ModeDuration);
+	  PartyModePanel(Ring& ring, long ModeDuration);
 
     void partyMode();
 
@@ -30,7 +30,7 @@ class PartyModePanel : public Panel
 
   private:
 
-    enum Mode
+    enum PartyMode
     {
       eRowRoll,
       eColumnRoll,
@@ -42,7 +42,7 @@ class PartyModePanel : public Panel
 
     long mCurrentModeStartTime, mLastMoveTime, mModeDuration;
 
-    Mode mCurrentMode;
+    PartyMode mCurrentMode;
 
     int mRow, mColumn;
 
