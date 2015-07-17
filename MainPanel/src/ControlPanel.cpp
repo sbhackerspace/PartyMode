@@ -14,8 +14,13 @@ ControlPanel::ControlPanel(Ring& ring)
     mLaunchPanel(ring),
     mDialPanel(ring),
     mKeyTurnPanel(ring),
-    mPartyPanel(ring, 150),
     mMode(eOffMode)
+{
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void ControlPanel::PARTY()
 {
 }
 
@@ -42,7 +47,6 @@ void ControlPanel::run()
         if (mDialPanel.dialMode())
         {
           mMode = eKeyTurnMode;
-          Serial.println("keymode");
         }
         break;
       case eKeyTurnMode:
@@ -52,7 +56,7 @@ void ControlPanel::run()
         }
         break;
       case ePartyMode:
-        mPartyPanel.partyMode();
+        PARTY();
         break;
     }
   }

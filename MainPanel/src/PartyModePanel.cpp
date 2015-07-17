@@ -48,7 +48,7 @@ void PartyModePanel::goToNextMode()
 //------------------------------------------------------------------------------
 void PartyModePanel::rowRoll()
 {
-  if (millis() - mLastMoveTime > mModeDuration/40)
+  if (millis() - mLastMoveTime > mModeDuration/20)
   {
     rowIncrement(mRow);
   }
@@ -62,7 +62,7 @@ void PartyModePanel::rowRoll()
 //------------------------------------------------------------------------------
 void PartyModePanel::columnRoll()
 {
-  if (millis() - mLastMoveTime > mModeDuration/40)
+  if (millis() - mLastMoveTime > mModeDuration/20)
   {
     columnIncrement(mColumn);
   }
@@ -77,7 +77,7 @@ void PartyModePanel::columnRoll()
 void PartyModePanel::snake()
 {
   long currentTime = millis();
-  if (currentTime - mLastMoveTime > mModeDuration/40)
+  if (currentTime - mLastMoveTime > mModeDuration/20)
   {
     columnIncrement(mColumn);
     if (mColumn == 0)
@@ -122,23 +122,28 @@ void PartyModePanel::snake()
 void PartyModePanel::partyMode()
 {
   clearStates();
+  delay(10);
   if (mCurrentMode == eRowRoll)
   {
+    Serial.println("rowroll");
     rowRoll();
   }
   else if (mCurrentMode == eColumnRoll)
   {
+    Serial.println("colroll");
     columnRoll();
   }
   else if (mCurrentMode == eSnake)
   {
+    Serial.println("colroll");
     snake();
   }
-  else if (mCurrentMode == eRowColumnRoll)
-  {
-    rowRoll();
-    columnRoll();
-  }
+  //else if (mCurrentMode == eRowColumnRoll)
+  //{
+  //Serial.println("rowcolroll");
+  //rowRoll();
+  //columnRoll();
+  //}
   else
   {
     Serial.println("ERROR: Invalid party mode");

@@ -66,6 +66,8 @@ class Panel
 
     static const int mKnobPin;
 
+    static const int mPhoneRingerPin;
+
     static const int mToggleMap[4][4];
     static const int mToggleLeds[4][4];
     boolean mToggleStates[4][4];

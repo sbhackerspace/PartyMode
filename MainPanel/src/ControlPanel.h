@@ -23,6 +23,8 @@ class ControlPanel : public Panel
 
   private:
 
+    void PARTY();
+
     ControlPanel(const ControlPanel&);
     ControlPanel& operator = (const ControlPanel&);
 
@@ -42,7 +44,6 @@ class ControlPanel : public Panel
     LaunchPanel mLaunchPanel;
     DialPanel mDialPanel;
     KeyTurnPanel mKeyTurnPanel;
-    PartyModePanel mPartyPanel;
 
     Mode mMode;
 };
