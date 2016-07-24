@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 MYPORT = 31337
-NumberOfPixels = 381
+#NumberOfPixels = 320
+NumberOfPixels = 205
 
 import sys, time
 from socket import *
@@ -13,9 +14,9 @@ def MakePixel(Red, Green, Blue):
 
 ################################################################################
 def SendPacket(Socket, Packet):
-  Socket.sendto(Packet, ('10.18.14.38', MYPORT)) #workroom
-  Socket.sendto(Packet, ('10.18.14.93', MYPORT)) #classroom
-  Socket.sendto(Packet, ('10.18.14.99', MYPORT)) #middle
+  Socket.sendto(Packet, ('workroom-partylights.internal.sbhackerspace.com', MYPORT))
+  Socket.sendto(Packet, ('classroom-partylights.internal.sbhackerspace.com', MYPORT))
+  Socket.sendto(Packet, ('10.18.0.68', MYPORT))
 
 ################################################################################
 def Larson(Socket):
@@ -30,7 +31,7 @@ def Larson(Socket):
         else:
           Packet += MakePixel(0, 255, 0)
       SendPacket(Socket, Packet)
-      time.sleep(.6)
+      time.sleep(.06)
     for index in range(NumberOfPixels-5, 2,-2):
       Packet = ''
       for pixel in range(NumberOfPixels):
@@ -39,19 +40,31 @@ def Larson(Socket):
         else:
           Packet += MakePixel(0, 255, 0)
       SendPacket(Socket, Packet)
-      time.sleep(.6)
+      time.sleep(.06)
+
+################################################################################
+def FindNumberOfPixels(Socket):
+  Packet = MakePixel(255, 255, 255) * 2 * NumberOfPixels
+  while True:
+    Packet = MakePixel(0, 0, 0) * NumberOfPixels
+    Packet += MakePixel(255, 0, 0)
+    SendPacket(s, Packet)
+    print 'Sent 0'
+    time.sleep(1)
 
 ################################################################################
 def Test(Socket):
+  Packet = MakePixel(255, 255, 255) *2* NumberOfPixels
   while True:
     Packet = MakePixel(255, 255, 255) * NumberOfPixels
     SendPacket(s, Packet)
     print 'Sent 255'
     time.sleep(1)
-    Packet = MakePixel(0, 0, 0) * NumberOfPixels
-    SendPacket(s, Packet)
-    print 'Sent 0'
-    time.sleep(1)
+    #Packet = MakePixel(0, 0, 0) * NumberOfPixels
+    #Packet += MakePixel(255, 0, 0)
+    #SendPacket(s, Packet)
+    #print 'Sent 0'
+    #time.sleep(1)
 
 
 
@@ -67,10 +80,24 @@ def Test(Socket):
     #time.sleep(.5)
 
 ################################################################################
+def GetFrameRate(Socket):
+  Fps = 80
+  while True:
+    print "Sending Packets"
+    for i in range(Fps):
+      Packet = MakePixel(0, 0, 0)* NumberOfPixels
+      SendPacket(s, Packet)
+      time.sleep(1.0 / Fps)
+    print "Pausing"
+    time.sleep(3)
+
+################################################################################
 ################################################################################
 if __name__ == "__main__":
   s = socket(AF_INET, SOCK_DGRAM)
   s.bind(('', 0))
   s.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
   Test(s)
+  #Larson(s)
+  #GetFrameRate(s)
 

@@ -16,7 +16,7 @@ TestPanel::TestPanel(Ring& ring)
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void TestPanel::testMode()
+void TestPanel::run()
 {
   if (isPanelOn())
   {
@@ -28,6 +28,7 @@ void TestPanel::testMode()
   else
   {
     clearStates();
+
     writeLeds();
     mRing.clearRing();
   }

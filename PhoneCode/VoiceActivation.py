@@ -53,11 +53,13 @@ def IsPartyModeActivated():
       print Hypothesis
       if "party mode confirmed" in Hypothesis:
         print "ACTIVATE!!!!!!!!!!\n"
+        os.system('espeak -a200 "party mode confirmed"')
         Counter = ClearDecoder(decoder)
-        return
+        return True
 
     if Counter > 50:
       Counter = ClearDecoder(decoder)
+  return False
 
 ################################################################################
 ################################################################################

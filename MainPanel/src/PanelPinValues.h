@@ -30,4 +30,5 @@ const int Panel::mToggleLeds[4][4] = {{ 3,  9,  4,  8},
 
 const int Panel::mSideSwitches[4] = {11, 2, 10, 5};
 const int Panel::mSideLeds[4] = {34, 22, 41, 7};
-const int Panel::mInvertedSwitches[numInvertedSwitches] = {15, 42, 50, 44, 45, 11, 2, 10, 5, 18};
+const int Panel::mInvertedSwitches[numInvertedSwitches] =
+  {6, 15, 11, 2, 10, 5, 18};

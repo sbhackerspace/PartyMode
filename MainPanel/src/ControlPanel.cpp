@@ -13,6 +13,7 @@ ControlPanel::ControlPanel(Ring& ring)
   : Panel(ring),
     mLaunchPanel(ring),
     mDialPanel(ring),
+    mPhonePanel(ring),
     mKeyTurnPanel(ring),
     mMode(eOffMode)
 {
@@ -22,6 +23,7 @@ ControlPanel::ControlPanel(Ring& ring)
 //------------------------------------------------------------------------------
 void ControlPanel::PARTY()
 {
+  Serial.print('p');
 }
 
 //------------------------------------------------------------------------------
@@ -45,6 +47,13 @@ void ControlPanel::run()
         break;
       case eDialMode:
         if (mDialPanel.dialMode())
+        {
+          mMode = ePhoneMode;
+          mPhonePanel.initializePhone();
+        }
+        break;
+      case ePhoneMode:
+        if (mPhonePanel.phoneMode())
         {
           mMode = eKeyTurnMode;
         }

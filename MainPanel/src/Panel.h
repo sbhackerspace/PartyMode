@@ -11,7 +11,7 @@
 
 #include "Ring.h"
 
-#define numInvertedSwitches 10
+#define numInvertedSwitches 7
 
 class Panel
 {

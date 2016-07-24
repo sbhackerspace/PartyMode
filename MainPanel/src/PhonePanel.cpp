@@ -19,12 +19,11 @@ PhonePanel::PhonePanel(Ring& ring)
 //------------------------------------------------------------------------------
 void PhonePanel::initializePhone()
 {
+  mPhoneInitialized = true;
   clearStates();
   writeLeds();
   mRing.clearRing();
-
-  Serial.println('s');
-  digitalWrite(mPhoneRingerPin, HIGH);
+  Serial.println('r');
 }
 
 //------------------------------------------------------------------------------
@@ -40,19 +39,14 @@ boolean PhonePanel::phoneMode()
   {
     char inputChar = Serial.read();
 
-    if (inputChar == 'a')
+    if (inputChar == 'f') //fail
+    {
+      fail();
+    }
+    else if (inputChar == 's') //success
     {
       return true;
     }
-    else if (inputChar == 'o')
-    {
-      digitalWrite(mPhoneRingerPin, LOW);
-    }
-  }
-  if (millis() - mLastMoveTime > 5000)
-  {
-    digitalWrite(mPhoneRingerPin, LOW);
-    fail();
   }
   return false;
 }

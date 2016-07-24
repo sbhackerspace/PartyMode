@@ -14,7 +14,7 @@ KeyTurnPanel::KeyTurnPanel(Ring& ring)
     mToggleState(true),
     mLeftTurnTime(0),
     mRightTurnTime(0),
-    mMaxKeyTurnTime(150)
+    mMaxKeyTurnTime(550)
 {
 }
 
@@ -22,7 +22,7 @@ KeyTurnPanel::KeyTurnPanel(Ring& ring)
 //------------------------------------------------------------------------------
 void KeyTurnPanel::toggleKeyLights()
 {
-  if (millis() - mLastMoveTime > 1000)
+  if (millis() - mLastMoveTime > 100)
   {
     mToggleState = !mToggleState;
     mLastMoveTime = millis();
@@ -45,6 +45,7 @@ boolean KeyTurnPanel::haveKeysBeenSimultaneouslyTurned()
     delay(50);
     clearStates();
     writeLeds();
+    Serial.println('p');
     return true;
   }
   return false;

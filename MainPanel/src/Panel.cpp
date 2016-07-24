@@ -99,7 +99,6 @@ void Panel::readAndWriteSiren() const
 //------------------------------------------------------------------------------
 boolean Panel::isInverted(int pinValue) const
 {
-  boolean inverted = false;
   for (int i = 0; i < numInvertedSwitches; ++i)
   {
     if (pinValue == mInvertedSwitches[i])
@@ -107,7 +106,7 @@ boolean Panel::isInverted(int pinValue) const
       return true;
     }
   }
-  return inverted;
+  return false;
 }
 
 //------------------------------------------------------------------------------
@@ -149,9 +148,9 @@ void Panel::clearStates()
   {
     for (int j = 0; j < mTotalNumberOfColumns; ++j)
     {
-      mToggleStates[i][j] = isInverted(mToggleMap[i][j]);
+      mToggleStates[i][j] = isInverted(mToggleStates[i][j]);
     }
-      mSideStates[i] = !isInverted(mSideSwitches[i]);
+    mSideStates[i] = !isInverted(mSideSwitches[i]);
   }
   mRightKeyState = !isInverted(mRightKeyPin);
   mLeftKeyState = !isInverted(mLeftKeyPin);
@@ -198,17 +197,18 @@ void Panel::fail()
 {
   clearStates();
   writeLeds();
-  //for (int i = 0; i <100; ++i)
-  //{
-  //analogWrite(mSirenPin, i);
-  //analogWrite(mRedLed, i);
-  //delay(6);
-  //}
-  //for (int i = 100; i >= 0; --i)
-  //{
-  //analogWrite(mSirenPin, i);
-  //analogWrite(mRedLed, i);
-  //delay(6);
-  //}
+  Serial.println('f');
+  for (int i = 0; i <100; ++i)
+  {
+    analogWrite(mSirenPin, i);
+    analogWrite(mRedLed, i);
+    delay(6);
+  }
+  for (int i = 100; i >= 0; --i)
+  {
+    analogWrite(mSirenPin, i);
+    analogWrite(mRedLed, i);
+    delay(6);
+  }
 }
 
