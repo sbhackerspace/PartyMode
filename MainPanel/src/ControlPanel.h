@@ -12,6 +12,7 @@
 #include "DialPanel.h"
 #include "PhonePanel.h"
 #include "KeyTurnPanel.h"
+#include "BigRedButtonPanel.h"
 #include "PartyModePanel.h"
 
 class ControlPanel : public Panel
@@ -38,6 +39,7 @@ class ControlPanel : public Panel
       eDialMode,
       ePhoneMode,
       eKeyTurnMode,
+      eBigRedButtonMode,
       ePartyMode
     };
 
@@ -47,6 +49,7 @@ class ControlPanel : public Panel
     DialPanel mDialPanel;
     PhonePanel mPhonePanel;
     KeyTurnPanel mKeyTurnPanel;
+    BigRedButtonPanel mBigRedButtonPanel;
 
     Mode mMode;
 };

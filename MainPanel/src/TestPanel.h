@@ -15,7 +15,7 @@ class TestPanel : public Panel
 
 	  TestPanel(Ring& ring);
 
-    void testMode();
+    void run();
 
   private:
 

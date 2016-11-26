@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 MYPORT = 31337
-#NumberOfPixels = 320
-NumberOfPixels = 205
+NumberOfPixels = 390
+#NumberOfPixels = 205
 
 import sys, time
 from socket import *
@@ -60,11 +60,11 @@ def Test(Socket):
     SendPacket(s, Packet)
     print 'Sent 255'
     time.sleep(1)
-    #Packet = MakePixel(0, 0, 0) * NumberOfPixels
-    #Packet += MakePixel(255, 0, 0)
-    #SendPacket(s, Packet)
-    #print 'Sent 0'
-    #time.sleep(1)
+    Packet = MakePixel(0, 0, 0) * NumberOfPixels
+    Packet += MakePixel(255, 0, 0)
+    SendPacket(s, Packet)
+    print 'Sent 0'
+    time.sleep(1)
 
 
 

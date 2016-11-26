@@ -15,6 +15,7 @@ ControlPanel::ControlPanel(Ring& ring)
     mDialPanel(ring),
     mPhonePanel(ring),
     mKeyTurnPanel(ring),
+    mBigRedButtonPanel(ring),
     mMode(eOffMode)
 {
 }
@@ -61,6 +62,13 @@ void ControlPanel::run()
       case eKeyTurnMode:
         if (mKeyTurnPanel.keyMode())
         {
+          mMode = eBigRedButtonMode;
+          mBigRedButtonPanel.initializeBigRedButton();
+        }
+        break;
+      case eBigRedButtonMode:
+        if (mBigRedButtonPanel.bigRedButtonMode())
+        {
           mMode = ePartyMode;
         }
         break;
@@ -72,5 +80,6 @@ void ControlPanel::run()
   else
   {
     offMode();
+    mMode = eOffMode;
   }
 }
