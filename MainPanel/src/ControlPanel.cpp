@@ -24,7 +24,7 @@ ControlPanel::ControlPanel(Ring& ring)
 //------------------------------------------------------------------------------
 void ControlPanel::PARTY()
 {
-  Serial.print('p');
+  Serial.print("PARTY MODE ENABLED");
 }
 
 //------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ void ControlPanel::run()
     {
       case eOffMode:
         mLaunchPanel.initializeLaunch();
-        mMode = eLaunchMode;
+        mMode = eKeyTurnMode;
         break;
       case eLaunchMode:
         if (mLaunchPanel.launchMode())
@@ -56,7 +56,7 @@ void ControlPanel::run()
       case ePhoneMode:
         if (mPhonePanel.phoneMode())
         {
-          mMode = eKeyTurnMode;
+          mMode = eBigRedButtonMode;
         }
         break;
       case eKeyTurnMode:
@@ -67,7 +67,7 @@ void ControlPanel::run()
         }
         break;
       case eBigRedButtonMode:
-        if (mBigRedButtonPanel.bigRedButtonMode())
+        if (!mBigRedButtonPanel.bigRedButtonMode())
         {
           mMode = ePartyMode;
         }

@@ -28,6 +28,8 @@ class KeyTurnPanel : public Panel
     KeyTurnPanel(const KeyTurnPanel&);
     KeyTurnPanel& operator = (const KeyTurnPanel&);
 
+    void hasTimeExpired(const long& turnTime);
+
   private:
 
     boolean mToggleState;

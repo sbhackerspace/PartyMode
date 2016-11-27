@@ -29,7 +29,6 @@ void BigRedButtonPanel::initializeBigRedButton()
 //------------------------------------------------------------------------------
 bool BigRedButtonPanel::bigRedButtonMode()
 {
-  mRing.colorRing(50);
   if (digitalRead(mRedButtonPin))
   {
     return true;

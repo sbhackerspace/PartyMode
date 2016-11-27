@@ -14,7 +14,7 @@ KeyTurnPanel::KeyTurnPanel(Ring& ring)
     mToggleState(true),
     mLeftTurnTime(0),
     mRightTurnTime(0),
-    mMaxKeyTurnTime(550)
+    mMaxKeyTurnTime(250)
 {
 }
 
@@ -38,14 +38,13 @@ boolean KeyTurnPanel::haveKeysBeenSimultaneouslyTurned()
   if
     (mLeftKeyState &&
      mRightKeyState &&
-     (abs(mLeftTurnTime - mRightTurnTime) > mMaxKeyTurnTime))
+     (abs(mLeftTurnTime - mRightTurnTime) < mMaxKeyTurnTime))
   {
     allStatesOn();
     writeLeds();
     delay(50);
     clearStates();
     writeLeds();
-    Serial.println('p');
     return true;
   }
   return false;
@@ -70,6 +69,16 @@ boolean KeyTurnPanel::getKeyStateChange(
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void KeyTurnPanel::hasTimeExpired(const long& turnTime)
+{
+  if (millis() - turnTime > mMaxKeyTurnTime)
+  {
+    fail();
+  }
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 boolean KeyTurnPanel::keyMode()
 {
   if (haveKeysBeenSimultaneouslyTurned())
@@ -81,10 +90,20 @@ boolean KeyTurnPanel::keyMode()
   {
     getKeyStateChange(mLeftKeyPin, mLeftKeyState, mLeftTurnTime);
   }
+  else
+  {
+    hasTimeExpired(mLeftTurnTime);
+  }
+
   if (!mRightKeyState)
   {
     getKeyStateChange(mRightKeyPin, mRightKeyState, mRightTurnTime);
   }
+  else
+  {
+    hasTimeExpired(mRightTurnTime);
+  }
+
   toggleKeyLights();
   return false;
 }
