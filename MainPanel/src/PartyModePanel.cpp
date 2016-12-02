@@ -119,7 +119,7 @@ void PartyModePanel::snake()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void PartyModePanel::partyMode()
+void PartyModePanel::party()
 {
   clearStates();
   delay(10);
@@ -138,12 +138,12 @@ void PartyModePanel::partyMode()
     Serial.println("colroll");
     snake();
   }
-  //else if (mCurrentMode == eRowColumnRoll)
-  //{
-  //Serial.println("rowcolroll");
-  //rowRoll();
-  //columnRoll();
-  //}
+  else if (mCurrentMode == eRowColumnRoll)
+  {
+    Serial.println("rowcolroll");
+    rowRoll();
+    columnRoll();
+  }
   else
   {
     Serial.println("ERROR: Invalid party mode");

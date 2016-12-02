@@ -15,7 +15,7 @@ class PartyModePanel : public Panel
 
 	  PartyModePanel(Ring& ring, long ModeDuration);
 
-    void partyMode();
+    void party();
 
   private:
 

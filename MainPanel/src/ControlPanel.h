@@ -50,6 +50,7 @@ class ControlPanel : public Panel
     PhonePanel mPhonePanel;
     KeyTurnPanel mKeyTurnPanel;
     BigRedButtonPanel mBigRedButtonPanel;
+    PartyModePanel mPartyModePanel;
 
     Mode mMode;
 };

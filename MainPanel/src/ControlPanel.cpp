@@ -16,7 +16,8 @@ ControlPanel::ControlPanel(Ring& ring)
     mPhonePanel(ring),
     mKeyTurnPanel(ring),
     mBigRedButtonPanel(ring),
-    mMode(eOffMode)
+    mMode(eOffMode),
+    mPartyModePanel(ring, 3000)
 {
 }
 
@@ -73,7 +74,7 @@ void ControlPanel::run()
         }
         break;
       case ePartyMode:
-        PARTY();
+        mPartyModePanel.party();
         break;
     }
   }
