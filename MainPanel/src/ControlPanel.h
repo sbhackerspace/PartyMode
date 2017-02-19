@@ -8,10 +8,11 @@
 #pragma once
 
 #include "Panel.h"
-#include "LaunchPanel.h"
+#include "TogglePanel.h"
 #include "DialPanel.h"
 #include "PhonePanel.h"
 #include "KeyTurnPanel.h"
+#include "TaintPanel.h"
 #include "BigRedButtonPanel.h"
 #include "PartyModePanel.h"
 
@@ -30,25 +31,29 @@ class ControlPanel : public Panel
     ControlPanel(const ControlPanel&);
     ControlPanel& operator = (const ControlPanel&);
 
+    void initialize();
+
   private:
 
     enum Mode
     {
       eOffMode,
-      eLaunchMode,
+      eToggleMode,
       eDialMode,
       ePhoneMode,
       eKeyTurnMode,
+      eTaintMode,
       eBigRedButtonMode,
       ePartyMode
     };
 
   private:
 
-    LaunchPanel mLaunchPanel;
+    TogglePanel mTogglePanel;
     DialPanel mDialPanel;
     PhonePanel mPhonePanel;
     KeyTurnPanel mKeyTurnPanel;
+    TaintPanel mTaintPanel;
     BigRedButtonPanel mBigRedButtonPanel;
     PartyModePanel mPartyModePanel;
 

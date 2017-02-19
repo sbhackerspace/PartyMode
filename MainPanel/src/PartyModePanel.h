@@ -17,10 +17,13 @@ class PartyModePanel : public Panel
 
     void party();
 
+    void initialize();
+
   private:
 
     void rowRoll();
     void columnRoll();
+    void rowColumnRoll();
     void snake();
 
     void goToNextMode();
@@ -40,7 +43,7 @@ class PartyModePanel : public Panel
 
   private:
 
-    long mCurrentModeStartTime, mLastMoveTime, mModeDuration;
+    long mCurrentModeStartTime, mModeDuration;
 
     PartyMode mCurrentMode;
 

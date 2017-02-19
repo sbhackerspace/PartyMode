@@ -20,6 +20,15 @@ KeyTurnPanel::KeyTurnPanel(Ring& ring)
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void KeyTurnPanel::initialize()
+{
+  clearStates();
+
+  writeLeds();
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void KeyTurnPanel::toggleKeyLights()
 {
   if (millis() - mLastMoveTime > 100)
@@ -83,6 +92,7 @@ boolean KeyTurnPanel::keyMode()
 {
   if (haveKeysBeenSimultaneouslyTurned())
   {
+    Serial.println("keys turned simulatenously!");
     return true;
   }
 

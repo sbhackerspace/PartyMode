@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 #include "ControlPanel.h"
-#include "TestPanel.h"
+//#include "TestPanel.h"
 #include "Ring.h"
 
 Ring ring;

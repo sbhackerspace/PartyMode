@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //  Description:
-//    This is the header for the launch mode panel
+//    This is the header for the toggle mode panel
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
@@ -9,15 +9,15 @@
 
 #include "Panel.h"
 
-class LaunchPanel : public Panel
+class TogglePanel : public Panel
 {
   public:
 
-	  LaunchPanel(Ring& ring);
+	  TogglePanel(Ring& ring);
 
-    boolean launchMode();
+    boolean toggleMode();
 
-    void initializeLaunch();
+    void initializeToggle();
 
   private:
 
@@ -44,17 +44,17 @@ class LaunchPanel : public Panel
 
     void temporarySuccesMethod();
 
-    LaunchPanel(const LaunchPanel&);
-    LaunchPanel& operator = (const LaunchPanel&);
+    TogglePanel(const TogglePanel&);
+    TogglePanel& operator = (const TogglePanel&);
 
   protected:
 
-    boolean mLaunchInitialized;
+    boolean mToggleInitialized;
 
   private:
 
     boolean mInScrollMode;
-    boolean mLaunchSuccess;
+    boolean mToggleSuccess;
     int mRandomizedTogglePins[4][4];
     int mRandomizedToggleLeds[4][4];
     boolean mRandomizedToggleStates[4][4];
@@ -72,7 +72,7 @@ class LaunchPanel : public Panel
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 inline
-boolean LaunchPanel::getCorrectState(int pin)
+boolean TogglePanel::getCorrectState(int pin)
 {
   return !digitalRead(pin);
 }

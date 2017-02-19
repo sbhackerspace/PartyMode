@@ -1,6 +1,7 @@
 #include "Panel.h"
 #include "PanelPinValues.h"
 
+bool Panel::mFail = false;
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 Panel::Panel(Ring& ring)
@@ -197,7 +198,8 @@ void Panel::fail()
 {
   clearStates();
   writeLeds();
-  Serial.println('f');
+  Serial.println("fail");
+  mFail = true;
   for (int i = 0; i <100; ++i)
   {
     analogWrite(mSirenPin, i);
@@ -210,5 +212,6 @@ void Panel::fail()
     analogWrite(mRedLed, i);
     delay(6);
   }
+  Serial.println(mFail ? "panel true" : "panel false");
 }
 

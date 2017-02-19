@@ -37,6 +37,9 @@ void DialPanel::initializeDialMode()
   {
     mKnobFinalValue = 1;
   }
+
+  mRedNumber = mGreenNumber = mBlueNumber = 0;
+
   mCurrentDistance = abs(currentPosition - mKnobFinalValue);
 
   mLedIncrementDistance = (mCurrentDistance / (3 * mRing.getNumPixels()));
@@ -89,6 +92,7 @@ void DialPanel::writeRing()
     }
     mRing.setPixelColor(i, Color);
   }
+  mRing.show();
 }
 
 //------------------------------------------------------------------------------
@@ -115,12 +119,11 @@ boolean DialPanel::dialMode()
   writeRing();
 
 
-  Serial.println(currentPosition);
-  Serial.println(mKnobFinalValue);
   if (abs(currentPosition - mKnobFinalValue) < 5)
   {
     mRing.clearRing();
-    Serial.println("success");
+    Serial.println("dial success");
+    mDialModeInitialized = false;
     return true;
   }
   return false;

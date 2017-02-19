@@ -22,5 +22,7 @@ class TestPanel : public Panel
     TestPanel(const TestPanel&);
     TestPanel& operator = (const TestPanel&);
 
+    uint8_t mColor;
+    long mTime;
 };
 

@@ -17,6 +17,8 @@ class KeyTurnPanel : public Panel
 
     boolean keyMode();
 
+    void initialize();
+
   private:
 
     void toggleKeyLights();

@@ -21,6 +21,15 @@ PartyModePanel::PartyModePanel(Ring& ring, long ModeDuration)
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+void PartyModePanel::initialize()
+{
+  mCurrentMode = eSnake;
+
+  mCurrentModeStartTime = millis();
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void PartyModePanel::goToNextMode()
 {
   if (mCurrentMode == eRowRoll)
@@ -29,15 +38,15 @@ void PartyModePanel::goToNextMode()
   }
   else if (mCurrentMode == eColumnRoll)
   {
-    mCurrentMode = eSnake;
+    mCurrentMode = eRowColumnRoll;
   }
-  else if (mCurrentMode == eSnake)
+  else if (mCurrentMode == eRowColumnRoll)
   {
-    mCurrentMode = eRowRoll;
+    mCurrentMode = eSnake;
   }
   else
   {
-    Serial.println("ERROR: Invalid party mode");
+    mCurrentMode = eRowRoll;
   }
   mRow = mColumn = 0;
 
@@ -48,11 +57,30 @@ void PartyModePanel::goToNextMode()
 //------------------------------------------------------------------------------
 void PartyModePanel::rowRoll()
 {
-  if (millis() - mLastMoveTime > mModeDuration/20)
+  if (abs(millis() - mLastMoveTime) > mModeDuration / 4)
   {
     rowIncrement(mRow);
   }
+  for (int i = 0; i < mTotalNumberOfColumns; ++i)
+  {
+    mToggleStates[mRow][i] = !isInverted(mToggleMap[mRow][i]);
+  }
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void PartyModePanel::rowColumnRoll()
+{
+  if (millis() - mLastMoveTime > mModeDuration / 4)
+  {
+    columnIncrement(mColumn);
+    rowIncrement(mRow);
+  }
   for (int i = 0; i < mTotalNumberOfRows; ++i)
+  {
+    mToggleStates[i][mColumn] = !isInverted(mToggleMap[i][mColumn]);
+  }
+  for (int i = 0; i < mTotalNumberOfColumns; ++i)
   {
     mToggleStates[mRow][i] = !isInverted(mToggleMap[mRow][i]);
   }
@@ -62,11 +90,11 @@ void PartyModePanel::rowRoll()
 //------------------------------------------------------------------------------
 void PartyModePanel::columnRoll()
 {
-  if (millis() - mLastMoveTime > mModeDuration/20)
+  if (millis() - mLastMoveTime > mModeDuration / 4)
   {
     columnIncrement(mColumn);
   }
-  for (int i = 0; i < mTotalNumberOfColumns; ++i)
+  for (int i = 0; i < mTotalNumberOfRows; ++i)
   {
     mToggleStates[i][mColumn] = !isInverted(mToggleMap[i][mColumn]);
   }
@@ -122,36 +150,27 @@ void PartyModePanel::snake()
 void PartyModePanel::party()
 {
   clearStates();
-  delay(10);
+  mRing.colorRing(50);
   if (mCurrentMode == eRowRoll)
   {
-    Serial.println("rowroll");
     rowRoll();
   }
   else if (mCurrentMode == eColumnRoll)
   {
-    Serial.println("colroll");
     columnRoll();
   }
   else if (mCurrentMode == eSnake)
   {
-    Serial.println("colroll");
     snake();
   }
   else if (mCurrentMode == eRowColumnRoll)
   {
-    Serial.println("rowcolroll");
-    rowRoll();
-    columnRoll();
-  }
-  else
-  {
-    Serial.println("ERROR: Invalid party mode");
+    rowColumnRoll();
   }
 
   writeLeds();
 
-  if (millis() - mCurrentModeStartTime > mModeDuration)
+  if (abs(millis() - mCurrentModeStartTime) > 3 * mModeDuration)
   {
     goToNextMode();
   }

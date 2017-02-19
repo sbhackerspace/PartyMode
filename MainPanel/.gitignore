@@ -1,4 +1,5 @@
 *.pyc
+*.swp
 app/bin/
 app/pde.jar
 build/macosx/work/

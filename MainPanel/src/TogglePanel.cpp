@@ -5,15 +5,15 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-#include "LaunchPanel.h"
+#include "TogglePanel.h"
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-LaunchPanel::LaunchPanel(Ring& ring)
+TogglePanel::TogglePanel(Ring& ring)
   : Panel(ring),
     mInScrollMode(true),
-    mLaunchInitialized(false),
-    mLaunchSuccess(false),
+    mToggleInitialized(false),
+    mToggleSuccess(false),
     mRandomizedTogglePins({{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}}),
     mRandomizedToggleLeds({{0,0,0,0}, {0,0,0,0}, {0,0,0,0}, {0,0,0,0}}),
     mRow(0),
@@ -28,7 +28,7 @@ LaunchPanel::LaunchPanel(Ring& ring)
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::initializeLaunch()
+void TogglePanel::initializeToggle()
 {
   clearStates();
   writeLeds();
@@ -62,12 +62,14 @@ void LaunchPanel::initializeLaunch()
     mRightKeyState,
     mRedState);
   mLastMoveTime = millis();
-  mLaunchInitialized = mInScrollMode = true;
+  mToggleInitialized = mInScrollMode = true;
+  mToggleSuccess = false;
+  Serial.println("toggle initialized");
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::clearRandomizedToggles()
+void TogglePanel::clearRandomizedToggles()
 {
   for (int i = 0; i < mTotalNumberOfRows; ++i)
   {
@@ -80,7 +82,7 @@ void LaunchPanel::clearRandomizedToggles()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::getRandomizedSwitchStates(
+void TogglePanel::getRandomizedSwitchStates(
   boolean toggleStates[4][4],
   boolean sideStates[4],
   boolean& leftKeyState,
@@ -102,7 +104,7 @@ void LaunchPanel::getRandomizedSwitchStates(
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-boolean LaunchPanel::correctToggleAndSwitchFlipped()
+boolean TogglePanel::correctToggleAndSwitchFlipped()
 {
   return ((mCorrectToggleState == digitalRead(mRandomizedTogglePins[mRow][mColumn])) &&
   (mCorrectSideState == digitalRead(mSideSwitches[mRow])));
@@ -110,7 +112,7 @@ boolean LaunchPanel::correctToggleAndSwitchFlipped()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-boolean LaunchPanel::incorrectToggleOrSwitchFlipped()
+boolean TogglePanel::incorrectToggleOrSwitchFlipped()
 {
   delay(20);
   boolean toggleStates[4][4];
@@ -150,7 +152,7 @@ boolean LaunchPanel::incorrectToggleOrSwitchFlipped()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::turnOnOnlyCompletedLights()
+void TogglePanel::turnOnOnlyCompletedLights()
 {
   clearRandomizedToggles();
   for(int i = 0; i <= mTotalNumberOfRows; ++i)
@@ -168,7 +170,7 @@ void LaunchPanel::turnOnOnlyCompletedLights()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::flashCurrentLed()
+void TogglePanel::flashCurrentLed()
 {
   turnOnOnlyCompletedLights();
   digitalWrite(mSideLeds[mRow], !isInverted(mSideLeds[mRow]));
@@ -189,7 +191,7 @@ void LaunchPanel::flashCurrentLed()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::flashRemainingLeds()
+void TogglePanel::flashRemainingLeds()
 {
   turnOnOnlyCompletedLights();
   digitalWrite(
@@ -215,7 +217,7 @@ void LaunchPanel::flashRemainingLeds()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void LaunchPanel::incrementToggle()
+void TogglePanel::incrementToggle()
 {
   mProgressCounter++;
 
@@ -225,7 +227,7 @@ void LaunchPanel::incrementToggle()
     rowIncrement(mRow);
     if (!mRow && !mColumn)
     {
-      mLaunchSuccess = true;
+      mToggleSuccess = true;
     }
   }
 
@@ -248,21 +250,22 @@ void LaunchPanel::incrementToggle()
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-boolean LaunchPanel::launchMode()
+boolean TogglePanel::toggleMode()
 {
-  if (!mLaunchInitialized)
+  if (!mToggleInitialized)
   {
-    initializeLaunch();
+    initializeToggle();
   }
 
-  if (mLaunchSuccess)
+  if (mToggleSuccess)
   {
+    Serial.println("toggleSuccess");
     return true;
   }
 
   if (millis() - mLastMoveTime > mTimeout)
   {
-    mLaunchInitialized = false;
+    mToggleInitialized = false;
     return false;
   }
 
@@ -273,7 +276,7 @@ boolean LaunchPanel::launchMode()
   else if(incorrectToggleOrSwitchFlipped())
   {
     fail();
-    mLaunchInitialized = false;
+    mToggleInitialized = false;
   }
 
   if (mInScrollMode)

@@ -24,6 +24,8 @@ class BigRedButtonPanel : public Panel
     BigRedButtonPanel(const BigRedButtonPanel&);
     BigRedButtonPanel& operator = (const BigRedButtonPanel&);
 
+    bool mRedFlash;
+
 };
 
 

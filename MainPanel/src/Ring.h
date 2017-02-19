@@ -25,9 +25,11 @@ class Ring{
 
     int  getNumPixels() const;
 
-    uint32_t getColor(int Red, int Green, int Blue) const;
+    uint32_t getColor(uint8_t Red, uint8_t Green, uint8_t Blue) const;
 
     void setPixelColor(int index, uint32_t color);
+
+    void setPixelColor(uint16_t index, uint8_t Red, uint8_t Green, uint8_t Blue);
 
     void show();
 

@@ -97,7 +97,7 @@ void Ring::colorRing(uint8_t wait)
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-uint32_t Ring::getColor(int Red, int Green, int Blue) const
+uint32_t Ring::getColor(uint8_t Red, uint8_t Green, uint8_t Blue) const
 {
   return mStrip.Color(Red, Green, Blue);
 }
@@ -107,5 +107,22 @@ uint32_t Ring::getColor(int Red, int Green, int Blue) const
 void Ring::setPixelColor(int index, uint32_t color)
 {
   mStrip.setPixelColor(index, color);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Ring::setPixelColor(
+  uint16_t index,
+  uint8_t Red,
+  uint8_t Green,
+  uint8_t Blue)
+{
+  mStrip.setPixelColor(index, Red, Green, Blue);
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Ring::show()
+{
   mStrip.show();
 }

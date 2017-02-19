@@ -10,7 +10,9 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 TestPanel::TestPanel(Ring& ring)
-  : Panel(ring)
+  : Panel(ring),
+    mColor(0x0000FF),
+    mTime(millis())
 {
 }
 
@@ -18,18 +20,36 @@ TestPanel::TestPanel(Ring& ring)
 //------------------------------------------------------------------------------
 void TestPanel::run()
 {
-  if (isPanelOn())
-  {
-    getSwitchStates();
-    writeLeds();
-    readAndWriteSiren();
-    mRing.colorRing(50);
-  }
-  else
-  {
-    clearStates();
+  getSwitchStates();
+  writeLeds();
 
-    writeLeds();
-    mRing.clearRing();
+  for (int i = 0; i < mRing.getNumPixels(); ++i)
+  {
+    mRing.setPixelColor(i, mColor);
   }
+
+  if (abs(millis() - mTime) > 800)
+  {
+    if (mColor == 0x0000FF)
+    {
+      mColor = 0x00FF00;
+    }
+    else if (mColor == 0x00FF00)
+    {
+      mColor = 0xFF0000;
+    }
+    else if (mColor == 0xFF0000)
+    {
+      mColor = 0x0000FF;
+    }
+    else
+    {
+      mColor = 0xFFFFFF;
+    }
+    mTime = millis();
+  }
+  mRing.show();
+
+  Serial.println(mToggleStates[3][1]);
+  digitalWrite(mToggleLeds[3][1], mToggleStates[3][1]);
 }

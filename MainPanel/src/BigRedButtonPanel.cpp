@@ -9,7 +9,8 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 BigRedButtonPanel::BigRedButtonPanel(Ring& ring)
-  : Panel(ring)
+  : Panel(ring),
+    mRedFlash(true)
 {
 }
 
@@ -19,19 +20,32 @@ void BigRedButtonPanel::initializeBigRedButton()
 {
   clearStates();
 
-  mRedState = true;
-
   writeLeds();
 
+  delay(1000);
+
+  mLastMoveTime = millis();
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 bool BigRedButtonPanel::bigRedButtonMode()
 {
-  if (digitalRead(mRedButtonPin))
+  getSwitchState(mRedState, mRedButtonPin);
+
+  if (mRedState)
   {
     return true;
   }
+
+  if (abs(millis() - mLastMoveTime) > 400)
+  {
+    digitalWrite(mRedLed, mRedFlash);
+
+    mRedFlash = !mRedFlash;
+
+    mLastMoveTime = millis();
+  }
+
   return false;
 }

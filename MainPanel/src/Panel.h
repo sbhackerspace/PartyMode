@@ -79,6 +79,8 @@ class Panel
     static const int mInvertedSwitches[numInvertedSwitches];
 
     long mLastMoveTime;
+
+    static bool mFail;
 };
 
 //------------------------------------------------------------------------------
